@@ -44,39 +44,41 @@ void QInt::ScanQInt(QInt& x)
 	
 	
 	int i = 0, checkslot = 0, step = 0,flag = 0;
-	int pos = input.size() - 1;
+	int pos = 0;
 	index = 1;
 
-	while (pos >= 0)
+	while (pos <= input.size() - 1)
 	{
+		if (pos == 0 && input[pos] == '-')
+		{
+			flag = -1;
+			pos++;
+		}
 		if (checkslot < one_slot)
 		{
-			data[i] += (input[pos] - '0') * pow(10.0, step);
-			pos--;
-			step++;
+			data[i] = data[i] * 10 + (input[pos] - '0');
+			pos++;
 			checkslot++;
 		}
 		else
 		{
 			i++;
 			index++;
-			step = 0;
 			checkslot = 0;
 		}
-
-		if (pos == 0 && input[pos] == '-')
-		{
-			data[0] *= -1;
-		}
+	}
+	if (flag == -1)
+	{
+		data[0] *= -1;
 	}
 }
 
 void QInt::PrintQInt(QInt x)
 {
-	for (int i = x.index-1; i >=0; i--)
+	for (int i = 0; i < x.index; i++)
 	{
-		if (x.data[i] != NULL) 
-		{ 
+		if (x.data[i] != NULL)
+		{
 			cout << x.data[i];
 		}
 	}
