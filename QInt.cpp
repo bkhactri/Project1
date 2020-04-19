@@ -77,10 +77,7 @@ void QInt::PrintQInt(QInt x)
 {
 	for (int i = 0; i < x.index; i++)
 	{
-		if (x.data[i] != NULL)
-		{
-			cout << x.data[i];
-		}
+		cout << x.data[i];
 	}
 }
 int main()
