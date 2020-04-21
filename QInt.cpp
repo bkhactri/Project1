@@ -1,14 +1,15 @@
 #include "QInt.h"
 QInt::QInt()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < array_size; i++)
 	{
 		data[i] = 0;
 	}
-
+	size = 0;
+	index=0;
 }
 QInt::~QInt(){}
-void QInt::ScanQInt(QInt& x)
+void QInt::ScanQInt(QInt& num)
 {
 	string input;
 	cout << "Input is: ";
@@ -41,51 +42,91 @@ void QInt::ScanQInt(QInt& x)
 			count++;
 		}
 	}
-	
-	
-	int i = 0, checkslot = 0, step = 0,flag = 0;
-	int pos = 0;
-	index = 1;
 
-	while (pos <= input.size() - 1)
+	if (type == 10)//Bien doi he co so 10
 	{
-		if (pos == 0 && input[pos] == '-')
+		int i = 0, checkslot = 0, flag = 0; //checkslot kiem tra so chu so co trong 1 o nho,flag de kiem tra dau cua so
+		int pos = 0;// bien dem 
+		index = 1;
+
+		while (pos <= size - 1)
 		{
-			flag = -1;
-			pos++;
+			if (pos == 0 && input[pos] == '-')
+			{
+				flag = -1;
+				pos++;
+			}
+			if (checkslot < one_slot)
+			{
+				data[i] = data[i] * 10 + (input[pos] - '0');
+				pos++;
+				checkslot++;
+			}
+			else
+			{
+				i++;
+				index++;
+				checkslot = 0;
+			}
 		}
-		if (checkslot < one_slot)
+		if (flag == -1)
 		{
-			data[i] = data[i] * 10 + (input[pos] - '0');
-			pos++;
-			checkslot++;
-		}
-		else
-		{
-			i++;
-			index++;
-			checkslot = 0;
+			data[0] *= -1;
 		}
 	}
-	if (flag == -1)
+	else if (type == 2)//Bien doi he co so 2
 	{
-		data[0] *= -1;
+		int pos = 0;
+		bool* bin = new bool[size - 1];
+		while (pos <= size - 1)
+		{
+			bin[pos] = input[pos] - '0';
+			pos++;
+		}
+		num.BinToDec(bin);
+	}
+	else//Bien doi he co so 16
+	{
+
 	}
 }
 
-void QInt::PrintQInt(QInt x)
+
+void QInt::PrintQInt(QInt num)
 {
-	for (int i = 0; i < x.index; i++)
+	for (int i = 0; i < num.index; i++)
 	{
-		cout << x.data[i];
+		cout << num.data[i];
 	}
+}
+
+bool* QInt::DecToBin(QInt num)
+{
+	return NULL;
+}
+
+char* QInt::DecToHex(QInt num)
+{
+	return NULL;
+}
+
+QInt QInt::BinToDec(bool* bit)
+{
+	QInt result;
+
+	
+
+	return result;
+}
+
+char* QInt::BinToHex(bool* bit)
+{
+	return NULL;
 }
 int main()
 {
-	QInt x;
-	x.ScanQInt(x);
-	x.PrintQInt(x);
-	//char t = '8';
-	//int a = t - '0';
+	QInt num16;
+	num16.ScanQInt(num16);
+	num16.PrintQInt(num16);
 	return 0;
 }
