@@ -6,15 +6,15 @@ QInt::QInt()
 		data[i] = 0;
 	}
 	size = 0;
-	index=0;
+	index = 0;
 }
 QInt::~QInt(){}
-void QInt::ScanQInt(QInt& num)
+void QInt::ScanQInt()
 {
 	string input;
 	cout << "Input is: ";
 	getline(cin, input);
-	int size = input.size();
+	size = input.size();
 	int count = 0;
 	int type = 2; //He co so nhap vao cho mac dinh la 2
 
@@ -45,67 +45,72 @@ void QInt::ScanQInt(QInt& num)
 
 	if (type == 10)//Bien doi he co so 10
 	{
-		int i = 0, checkslot = 0, flag = 0; //checkslot kiem tra so chu so co trong 1 o nho,flag de kiem tra dau cua so
-		int pos = 0;// bien dem 
+		int i = 0, checkslot = 0, step = 0, flag = 0; //checkslot kiem tra so chu so co trong 1 o nho,flag de kiem tra dau cua so
+		int pos = size-1;// bien dem 
 		index = 1;
 
-		while (pos <= size - 1)
+		while (pos >= 0)
 		{
-			if (pos == 0 && input[pos] == '-')
-			{
-				flag = -1;
-				pos++;
-			}
 			if (checkslot < one_slot)
 			{
-				data[i] = data[i] * 10 + (input[pos] - '0');
-				pos++;
+				data[i] += (input[pos] - '0') * pow(10.0, step);
+				pos--;
+				step++;
 				checkslot++;
 			}
 			else
 			{
 				i++;
 				index++;
+				step = 0;
 				checkslot = 0;
 			}
-		}
-		if (flag == -1)
-		{
-			data[0] *= -1;
-		}
-	}
-	else if (type == 2)//Bien doi he co so 2
-	{
-		int pos = 0;
-		bool* bin = new bool[size - 1];
-		while (pos <= size - 1)
-		{
-			bin[pos] = input[pos] - '0';
-			pos++;
-		}
-		num.BinToDec(bin);
-	}
-	else//Bien doi he co so 16
-	{
 
+			if (pos == 0 && input[pos] == '-')
+			{
+				data[0] *= -1;
+			}
+		}
+	}
+	else if (type == 16)//Bien doi he co so 16
+	{
+		
 	}
 }
 
-
-void QInt::PrintQInt(QInt num)
+void QInt::PrintQInt()
 {
-	for (int i = 0; i < num.index; i++)
+	for (int i = index - 1; i >= 0; i--)
 	{
-		cout << num.data[i];
+		cout <<data[i];
 	}
+	
 }
 
-bool* QInt::DecToBin(QInt num)
+bool* QInt::DecToBin(int &count)
 {
-	return NULL;
+	QInt div = *this;
+	bool surplus = 0;
+	bool* res = new bool[128];
+	while (div.data[0] > 0)
+	{
+		div.Div2(surplus);
+		res[count] = surplus;
+		count++;
+	}
+
+	for (int i = 0; i <= count / 2; i++)
+	{
+		bool temp = res[i];
+		res[i] = res[count - 1 - i];
+		res[count - 1 - i] = temp;
+	}
+
+	return res;
 }
 
-char* QInt::DecToHex(QInt num)
+
+string QInt::DecToHex()
 {
 	return NULL;
 }
@@ -113,20 +118,65 @@ char* QInt::DecToHex(QInt num)
 QInt QInt::BinToDec(bool* bit)
 {
 	QInt result;
-
-	
-
 	return result;
 }
 
-char* QInt::BinToHex(bool* bit)
+string QInt::BinToHex(bool* bit)
 {
 	return NULL;
 }
+
+bool* QInt::HexToBin(string num)
+{
+	return NULL;
+}
+
+QInt QInt::Div2(bool &sur)
+{
+	QInt res;
+	res.index = index;
+	bool flag = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		res.data[i] = data[i] / 2;
+		if (i==0 && data[i] % 2 == 1)
+		{
+			sur = 1;
+			flag = 1;
+		}
+		if (i > 0 && data[i] % 2 == 1)
+		{
+			res.data[i - 1] += 1000000000 / 2;
+		}
+		if (i > 0 && res.data[i - 1] > 1000000000)
+		{
+			res.data[i]++;
+			res.data[i - 1] %= 1000000000;
+		}
+	}
+	if (flag != 1)
+	{
+		sur = 0;
+	}
+	*this = res;
+	return *this;
+}
+
 int main()
 {
 	QInt num16;
-	num16.ScanQInt(num16);
-	num16.PrintQInt(num16);
+	num16.ScanQInt();
+	num16.PrintQInt();
+	
+	cout << endl;
+
+	int count = 0;
+	bool* t = num16.DecToBin(count);
+
+	for (int i = 0; i < count; i++)
+	{
+		cout << t[i];
+	}
+
 	return 0;
 }
