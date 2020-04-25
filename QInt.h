@@ -8,31 +8,34 @@
 using namespace std;
 
 #define max_bit 128 //16 byte
-#define one_slot 9 //So ky tu toi da trong 1 o nho
 #define array_size 4
 class QInt
 {
 private:
 	int data[4];
-	int index; //luu tru so o nho can thiet de luu tru
-	int size; //kich thuoc cua day so
+	int bitSize;
 public:
-	int getSize() { return size; }
-	void setSize(int _size) { size = _size; }
+	int getSize() { return bitSize; }
+	void setSize(int _size) { bitSize = _size; }
+
 	QInt();
-	
+	QInt(string input);
 	~QInt();
+
 	void ScanQInt();
-	void PrintQInt();
-	bool* DecToBin(int& count); //he 10 sang he 2
+	void PrintQInt(bool *bit);
+
+	string DecToBin(string num); //he 10 sang he 2 
 	string DecToHex();//he 10 sang he 16
 
 	QInt BinToDec(bool* bit); //he 2 sang he 10
-	string BinToHex(bool *bit);//he 2 sang he 16
+	string BinToHex(bool* bit);//he 2 sang he 16
 
-	bool* HexToBin(string num); //he 16 sang he 2
-
-	QInt Div2(bool &sur);
+	string HexToBin(string num); //he 16 sang he 2
+	bool* StringToBitArr(string input);
 };
+string Div2(const string &num, char& bit);
+void StandardHex(string &input);
 
 #endif
+
