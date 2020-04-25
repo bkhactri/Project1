@@ -9,7 +9,7 @@ QInt::QInt()
 }
 QInt::QInt(string input)
 {
-	bitSize = 0;
+	QInt temp;
 	int index = 0;
 	int size = input.size();
 	int type = 2; // He co so nhap vao cho mac dinh la 2
@@ -146,6 +146,15 @@ bool* QInt::StringToBitArr(string input)
 	}
 	return BitArr;
 }
+string QInt::BitArrToString(bool* bit)
+{
+	string res;
+	for (int i = 0; i < bitSize; i++)
+	{
+		res += (bit[i] + '0');
+	}
+	return res;
+}
 
 void StandardHex(string &input)
 {
@@ -175,11 +184,13 @@ int main()
 	string t = num16.HexToBin("673A");
 	cout << t << endl;
 	bool* num = num16.StringToBitArr(t);
-
 	for (int i = 0; i < num16.getSize(); i++)
 	{
 		cout << t[i];
 	}
+	cout << endl;
+	string temp = num16.BitArrToString(num);
+	cout << temp;
 
 	return 0;
 }

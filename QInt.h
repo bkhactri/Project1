@@ -33,6 +33,7 @@ public:
 
 	string HexToBin(string num); //he 16 sang he 2
 	bool* StringToBitArr(string input);
+	string BitArrToString(bool* bit);
 };
 string Div2(const string &num, char& bit);
 void StandardHex(string &input);
