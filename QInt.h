@@ -9,34 +9,50 @@ using namespace std;
 
 #define max_bit 128 //16 byte
 #define array_size 4
+
+
 class QInt
 {
 private:
 	int data[4];
-	int bitSize;
 public:
-	int getSize() { return bitSize; }
-	void setSize(int _size) { bitSize = _size; }
 
 	QInt();
 	QInt(string input);
 	~QInt();
 
+
 	void ScanQInt();
-	void PrintQInt(bool *bit);
-
+	
 	string DecToBin(string num); //he 10 sang he 2 
-	string DecToHex();//he 10 sang he 16
-
-	QInt BinToDec(bool* bit); //he 2 sang he 10
-	string BinToHex(bool* bit);//he 2 sang he 16
-
+	string DecToHex(string num); //he 10 sang he 16
+	string BinToDec(string bit); //he 2 sang he 10
+	string BinToHex(string bit); //he 2 sang he 16
 	string HexToBin(string num); //he 16 sang he 2
-	bool* StringToBitArr(string input);
-	string BitArrToString(bool* bit);
+
+
+	QInt operator&(const QInt& num16);
+	QInt operator|(const QInt& num16);
+	QInt operator^(const QInt& num16);
+	QInt operator~();
+
+
+	QInt operator>>(int nBitShifted);
+	QInt operator<<(int nBitShifted);
+
+
+	QInt rol(int nBitShifted);
+	QInt ror(int nBitShifted);
 };
+
 string Div2(const string &num, char& bit);
-void StandardHex(string &input);
+void Plus1(string& num);
+void StandardPrintBit(string &input);
+void StandardCalcBit(string& input);
+
+
+
+
 
 #endif
 

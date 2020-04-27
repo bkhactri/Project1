@@ -5,11 +5,14 @@ QInt::QInt()
 	{
 		data[i] = 0;
 	}
-	bitSize = 0;
 }
+
 QInt::QInt(string input)
 {
-	QInt temp;
+	for (int i = 0; i < array_size; i++)
+	{
+		data[i] = 0;
+	}
 	int index = 0;
 	int size = input.size();
 	int type = 2; // He co so nhap vao cho mac dinh la 2
@@ -37,10 +40,28 @@ QInt::QInt(string input)
 			index++;
 		}
 	}
+	string bit_array;
+	if (type == 10)
+	{
+		bit_array = DecToBin(input);
+	}
+	else if (type == 16)
+	{
+		bit_array = HexToBin(input);
+	}
+	else if (type == 2)
+	{
+		bit_array = input;
+	}
+
+	cout << bit_array;
+	//bit_array ... mang bit -> int[]
+	//string -> int[]
 
 }
-QInt::~QInt() {}
-void QInt::ScanQInt()
+
+QInt::~QInt(){}
+void QInt::ScanQInt() //Nhap vo string
 {
 	string num16;
 	cout << "Nhap vao so lon: "; 
@@ -49,24 +70,42 @@ void QInt::ScanQInt()
 	*this = temp;
 }
 
-void QInt::PrintQInt(bool *bit)
-{
-
-}
 
 string QInt::DecToBin(string num)
 {
+	int status = 1;
 	string bit_array;
 	char bit;
+	if (num[0] == '-')
+	{
+		status = -1;
+		num.erase(0, 1);
+	}
 	while (num != "")
 	{
 		num = Div2(num, bit);
 		bit_array += (bit + '0');
 	}
 	reverse(bit_array.begin(), bit_array.end());
+	if (status == 1)
+	{
+		StandardPrintBit(bit_array);
+	}
+	else if (status == -1)
+	{
+		StandardCalcBit(bit_array);
+		string temp;
+		temp += '1';
+		for (int i = 1; i < bit_array.size(); i++)
+		{
+			if (bit_array[i] == '0') temp += '1';
+			else if (bit_array[i] == '1') temp += '0';
+		}
+		Plus1(temp);
+		return temp;
+	}
 	return bit_array;
 }
-
 string QInt::HexToBin(string num)
 {
 	string bit_array;
@@ -89,27 +128,29 @@ string QInt::HexToBin(string num)
 		else if (num[i] == 'E' || num[i] == 'e') { bit_array += "1110"; }
 		else if (num[i] == 'F' || num[i] == 'f') { bit_array += "1111"; }
 	}
-	StandardHex(bit_array);
+	StandardPrintBit(bit_array);
 	return bit_array;
 }
+string QInt::DecToHex(string num)
+{
+
+	return NULL;
+}
+string QInt::BinToDec(string bit)
+{
+	string dec;
+	StandardCalcBit(bit);
+	int size = bit.size();
 
 
-string QInt::DecToHex()
+
+	return dec;
+}
+string QInt::BinToHex(string bit)
 {
 	return NULL;
 }
 
-
-QInt QInt::BinToDec(bool* bit)
-{
-	QInt result;
-	return result;
-}
-
-string QInt::BinToHex(bool* bit)
-{
-	return NULL;
-}
 
 
 string Div2(const string &num,char &bit)
@@ -134,29 +175,7 @@ string Div2(const string &num,char &bit)
 	else bit = 0;
 	return res;
 }
-
-bool* QInt::StringToBitArr(string input)
-{
-	bool* BitArr = new bool[max_bit];
-	int i = 0;
-	while (i < input.size())
-	{
-		BitArr[bitSize++] = input[i] -'0';
-		i++;
-	}
-	return BitArr;
-}
-string QInt::BitArrToString(bool* bit)
-{
-	string res;
-	for (int i = 0; i < bitSize; i++)
-	{
-		res += (bit[i] + '0');
-	}
-	return res;
-}
-
-void StandardHex(string &input)
+void StandardPrintBit(string& input)
 {
 	string res;
 	int i = 0;
@@ -173,24 +192,56 @@ void StandardHex(string &input)
 		}
 		i++;
 	}
-	input.erase(0, erase);
+	if (erase == input.size())
+	{
+		input = "0";
+	}
+	else
+	{
+		input.erase(0, erase);
+	}
 }
+void StandardCalcBit(string& input)
+{
+	while (input.size() % 32 != 0)
+	{
+		input.insert(0, "0");
+	}
+}
+void Plus1(string& num)
+{
+	int sur_bit = 1;
+	for (int i = num.length() - 1; i >= 1; i--)
+	{
+		int temp = (num[i] - '0') + sur_bit;
+		if (temp == 3)
+		{
+			num[i] = '1';
+			sur_bit = 1;
+		}
+		if (temp == 2)
+		{
+			num[i] = '0';
+			sur_bit = 1;
+		}
+		else if (temp == 1)
+		{
+			num[i] = temp + '0';
+			sur_bit = 0;
+		}
+		if (sur_bit == 0) break;
+	}
+}
+
+
 
 int main()
 {
 	QInt num16;
-	//num16.ScanQInt();
+	num16.ScanQInt();
+	
+	
 
-	string t = num16.HexToBin("673A");
-	cout << t << endl;
-	bool* num = num16.StringToBitArr(t);
-	for (int i = 0; i < num16.getSize(); i++)
-	{
-		cout << t[i];
-	}
-	cout << endl;
-	string temp = num16.BitArrToString(num);
-	cout << temp;
 
 	return 0;
 }
