@@ -1,4 +1,88 @@
 #include "QInt.h"
+void getBit(int x, char temp[32])
+{
+	//int bit[32];
+	for (int i = 0; i < 32; i++)
+	{
+		temp[i] = (x >> 31 - i) & 1;
+		//cout << int(temp[i]);
+		//if ((i + 1) % 8 == 0)
+		//{
+		//	cout << " ";
+		//}
+	}
+}
+void setBit(char bit[32], int& x)
+{
+	for (int i = 0; i < 32; i++)
+	{
+		x = x | (bit[i] << 31 - i);
+	}
+}
+void convertStringtoInt4(string a, int bytes[4])
+{
+	QInt c;
+	char* b = new char[128];
+	for (int i = 0; i < 128; i++)
+	{
+		b[i] = 0;
+	}
+	int k = 127;
+	for (int i = a.size() - 1; i >= 0; i--)
+	{
+		if (a[i] == '0' || a[i] == '1')
+		{
+			b[k--] = a[i] - 48;
+		}
+	}
+	char* temp = new char[32];
+	int y = 0;
+	int z = 0;
+	for (int i = 0; i < 128; i++)
+	{
+		temp[y++] = b[i];
+		if (y % 32 == 0)
+		{
+			y = 0;
+			setBit(temp, bytes[z++]);
+		}
+	}
+	delete[] temp;
+	delete[] b;
+}
+string convertInt4toString(int bytes[4])
+{
+	string a;
+	char* b = new char[128];
+	char* temp = new char[32];
+	int h = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		getBit(bytes[i], temp);
+		for (int j = 0; j < 32; j++)
+		{
+			b[h++] = temp[j];
+		}
+	}
+	int slbit = 0;
+	int flag = 0;
+	for (int i = 0; i < 128; i++)
+	{
+		if (b[i] == 1)
+		{
+			flag = 1;
+			slbit = 127 - i;
+			break;
+		}
+	}
+	a.resize(slbit);
+	int c = 0;
+	for (int i = 127 - slbit; i < 128; i++)
+	{
+		a[c++] = b[i] + 48;
+	}
+	return a;
+}
 QInt::QInt()
 {
 	for (int i = 0; i < array_size; i++)
@@ -56,7 +140,9 @@ QInt::QInt(string input)
 
 	cout << bit_array;
 	//bit_array ... mang bit -> int[]
+	convertStringtoInt4(bit_array, data);
 	//string -> int[]
+	string bit_array1 = convertInt4toString(data);
 
 }
 
