@@ -71,13 +71,13 @@ string convertInt4toString(int bytes[4])
 		if (b[i] == 1)
 		{
 			flag = 1;
-			slbit = 127 - i;
+			slbit = 128 - i;
 			break;
 		}
 	}
 	a.resize(slbit);
 	int c = 0;
-	for (int i = 127 - slbit; i < 128; i++)
+	for (int i = 128 - slbit; i < 128; i++)
 	{
 		a[c++] = b[i] + 48;
 	}
@@ -139,9 +139,9 @@ QInt::QInt(string input)
 	}
 
 	cout << bit_array;
-	//bit_array ... mang bit -> int[]
+	//bit_array ... mang bit -> int[] ok
 	convertStringtoInt4(bit_array, data);
-	//string -> int[]
+	//string -> int[] ok
 	string bit_array1 = convertInt4toString(data);
 
 }
