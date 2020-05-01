@@ -125,9 +125,19 @@ void ShiftRight(int bytes[4], int k)
 	int n = a.size();
 	string kq;
 	kq.resize(128);
-	for (int i = 0; i < k + 128 - n; i++)
+	if (a[0] == '0')
 	{
-		kq[i] = '0';
+		for (int i = 0; i < k + 128 - n; i++)
+		{
+			kq[i] = '0';
+		}
+	}
+	else
+	{
+		for (int i = 0; i < k + 128 - n; i++)
+		{
+			kq[i] = '1';
+		}
 	}
 	int  j = 0;
 	for (int i = k + 128 - n; i < 128; i++)
@@ -167,7 +177,6 @@ QInt::QInt()
 		data[i] = 0;
 	}
 }
-
 QInt::QInt(string input)
 {
 	for (int i = 0; i < array_size; i++)
