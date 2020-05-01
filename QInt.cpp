@@ -83,6 +83,83 @@ string convertInt4toString(int bytes[4])
 	}
 	return a;
 }
+void ShiftLeft(int bytes[4], int k)
+{
+	string a = convertInt4toString(bytes);
+	int n = a.size();
+	string kq;
+	kq.resize(128);
+	for (int i = 128 - k; i < 128; i++)
+	{
+		kq[i] = '0';
+	}
+	if (n + k <= 128)
+	{
+		for (int i = 0; i < 128 - k - n; i++)
+		{
+			kq[i] = '0';
+		}
+		int j = 0;
+		for (int i = 128 - k - n; i < 128 - k; i++)
+		{
+			kq[i] = a[j++];
+		}
+	}
+	else
+	{
+		int  j = n - 1;
+		for (int i = 127 - k; i >= 0; i--)
+		{
+			kq[i] = a[j--];
+		}
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		bytes[i] = 0;
+	}
+	convertStringtoInt4(kq, bytes);
+}
+void ShiftRight(int bytes[4], int k)
+{
+	string a = convertInt4toString(bytes);
+	int n = a.size();
+	string kq;
+	kq.resize(128);
+	for (int i = 0; i < k + 128 - n; i++)
+	{
+		kq[i] = '0';
+	}
+	int  j = 0;
+	for (int i = k + 128 - n; i < 128; i++)
+	{
+		kq[i] = a[j++];
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		bytes[i] = 0;
+	}
+	convertStringtoInt4(kq, bytes);
+}
+bool CheckSign(int bytes[4])
+{
+	string a = convertInt4toString(bytes);
+	int n = a.size();
+	string temp;
+	temp.resize(128);
+	for (int i = 0; i < 128 - n; i++)
+	{
+		temp[i] = '0';
+	}
+	int j = 0;
+	for (int i = 128 - n; i < 128; i++)
+	{
+		temp[i] = a[j++];
+	}
+	if (temp[0] == '0')
+		return 1;
+	else
+		return 0;
+}
 QInt::QInt()
 {
 	for (int i = 0; i < array_size; i++)
