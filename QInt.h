@@ -50,18 +50,18 @@ public:
 	QInt operator+(const QInt&);
 	QInt operator-(const QInt&);
 	QInt operator*(const QInt&);
-	QInt operator/(const QInt& );
+	QInt operator/(const QInt&);
 
 
 	QInt rol(int nBitRotate);
 	QInt ror(int nBitRotate);
 
 
-	bool operator==(const QInt&);
-	bool operator>(const QInt&);
-	bool operator<(const QInt&);
-	bool operator>=(const QInt&);
-	bool operator<=(const QInt&);
+	bool operator==(const QInt&) const;
+	bool operator>(const QInt&) const;
+	bool operator<(const QInt&) const;
+	bool operator>=(const QInt&) const;
+	bool operator<=(const QInt&) const;
 
 };
 

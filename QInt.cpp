@@ -75,7 +75,7 @@ void QInt::PrintQIntHex()
 	else 
 	{
 		string nBit = ConvertInt4toString(this->data);
-		string nHex = BinToHex(nHex);
+		string nHex = BinToHex(nBit);
 		cout << nHex << endl;
 	}
 }
@@ -128,14 +128,12 @@ string QInt::HexToBin(string nHex)
 	}
 	return bit_array;
 }
-
 string QInt::DecToHex(string nDec)
 {
 	string Temp = DecToBin(nDec);
 	string res = BinToHex(Temp);
 	return res;
 }
-
 string QInt::BinToDec(string bit)
 {
 	string nDec = "0";
@@ -237,7 +235,6 @@ string Multi2(int repeat)
 	}
 	return res;
 }
-
 string ConvertToOffetTwo(string num)
 {
 	FillZero(num, 128);
@@ -258,7 +255,6 @@ string ConvertToOffetTwo(string num)
 	temp = PlusBit(temp, "1");
 	return temp;
 }
-
 string PlusBit(string num1, string num2)//num1 + num2
 {
 	int sur_bit = 0;
@@ -313,7 +309,6 @@ string MultiBit(string num1, string num2)
 	EraseZero(res);
 	return res;
 }
-
 string PlusDec(string num1, string num2)
 {
 	bool sign = 0;//Biến xét dấu , 0 là + , 1 là -
@@ -436,6 +431,7 @@ void EraseZero(string& num)
 }
 
 
+//Ừng Văn Tuấn 
 void GetBit(int x, char bit[32])
 {
 	for (int i = 0; i < 32; i++)
@@ -450,7 +446,6 @@ void SetBit(char bit[32], int& x)
 		x = x | (bit[i] << 31 - i);
 	}
 }
-
 void ConvertStringtoInt4(string a, int data[4])
 {
 	QInt c;
@@ -515,26 +510,17 @@ string ConvertInt4toString(const int bytes[4])
 	}
 	return a;
 }
-//1 +, 0 -
 bool CheckSign(const int bytes[4])
 {
 	string a = ConvertInt4toString(bytes);
-	int n = a.size();
-	string temp;
-	temp.resize(128);
-	for (int i = 0; i < 128 - n; i++)
+	if ((a[0] == '0' || a[0] == '1') && a.size() != 128)
 	{
-		temp[i] = '0';
-	}
-	int j = 0;
-	for (int i = 128 - n; i < 128; i++)
-	{
-		temp[i] = a[j++];
-	}
-	if (temp[0] == '0')
 		return 1;
-	else
+	}
+	else if (a[0] == '1' && a.size() == 128)
+	{
 		return 0;
+	}
 }
 bool IsZero(const int bytes[4])
 {
@@ -550,8 +536,114 @@ bool IsZero(const int bytes[4])
 	return flag;
 }
 
-//operator
 
+
+
+//Toán tử and
+QInt QInt::operator&(const QInt& num)
+{
+	QInt res;
+	string n1 = ConvertInt4toString(this->data);
+	string n2 = ConvertInt4toString(num.data);
+	string temp = "";
+	if (n1.size() > n2.size())
+	{
+		FillZero(n2, n1.size());
+	}
+	else
+	{
+		FillZero(n1, n2.size());
+	}
+	
+	for (int i = n1.size() - 1; i >= 0; i--)
+	{
+		if ((n1[i] == '0' && n2[i] == '0') || (n1[i] == '1' && n2[i] == '0') || (n1[i] == '0' && n2[i] == '1'))
+		{
+			temp = '0' + temp;
+		}
+		if (n1[i] == '1' && n2[i] == '1')
+		{
+			temp = '1' + temp;
+		}
+	}
+	ConvertStringtoInt4(temp, res.data);
+	return res;
+}
+//Toán tử or
+QInt QInt::operator|(const QInt& num)
+{
+	QInt res;
+	string n1 = ConvertInt4toString(this->data);
+	string n2 = ConvertInt4toString(num.data);
+	string temp = "";
+	if (n1.size() > n2.size())
+	{
+		FillZero(n2, n1.size());
+	}
+	else
+	{
+		FillZero(n1, n2.size());
+	}
+
+	for (int i = n1.size() - 1; i >= 0; i--)
+	{
+		if ((n1[i] == '1' && n2[i] == '1') || (n1[i] == '1' && n2[i] == '0') || (n1[i] == '0' && n2[i] == '1'))
+		{
+			temp = '1' + temp;
+		}
+		if (n1[i] == '0' && n2[i] == '0')
+		{
+			temp = '0' + temp;
+		}
+	}
+	ConvertStringtoInt4(temp, res.data);
+	return res;
+}
+//Toán tử xor
+QInt QInt::operator^(const QInt& num)
+{
+	QInt res;
+	string n1 = ConvertInt4toString(this->data);
+	string n2 = ConvertInt4toString(num.data);
+	string temp = "";
+	if (n1.size() > n2.size())
+	{
+		FillZero(n2, n1.size());
+	}
+	else
+	{
+		FillZero(n1, n2.size());
+	}
+
+	for (int i = n1.size() - 1; i >= 0; i--)
+	{
+		if ((n1[i] == '0' && n2[i] == '1') || (n1[i] == '1' && n2[i] == '0'))
+		{
+			temp = '1' + temp;
+		}
+		if ((n1[i] == '0' && n2[i] == '0') || (n1[i] == '1' && n2[i] == '1'))
+		{
+			temp = '0' + temp;
+		}
+	}
+	ConvertStringtoInt4(temp, res.data);
+	return res;
+}
+//Toán tủ not
+QInt QInt::operator~()
+{
+	QInt res;
+	string n = ConvertInt4toString(this->data);
+	FillZero(n, 128);
+	string temp;
+	for (int i = 0; i < n.size(); i++)
+	{
+		if (n[i] == '0') temp += '1';
+		else if (n[i] == '1') temp += '0';
+	}
+	ConvertStringtoInt4(temp, res.data);
+	return res;
+}
 //Shift Left
 QInt QInt::operator<<(int nBitShifted)
 {
@@ -590,7 +682,6 @@ QInt QInt::operator<<(int nBitShifted)
 	ConvertStringtoInt4(kq, this->data);
 	return *this;
 }
-
 //Shift Right
 QInt QInt::operator>>(int nBitShifted)
 {
@@ -624,7 +715,6 @@ QInt QInt::operator>>(int nBitShifted)
 	ConvertStringtoInt4(kq, this->data);
 	return *this;
 }
-
 //Toán tử cộng
 QInt QInt::operator+(const QInt& num)
 {
@@ -635,7 +725,6 @@ QInt QInt::operator+(const QInt& num)
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
-
 //Toán tử -
 QInt QInt::operator-(const QInt& num)
 {
@@ -647,7 +736,6 @@ QInt QInt::operator-(const QInt& num)
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
-
 //Toán tử *
 QInt QInt::operator*(const QInt& num)
 {
@@ -683,25 +771,105 @@ QInt QInt::operator*(const QInt& num)
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
-
-//Toán tủ /
+//Toán tử /
 QInt QInt::operator/(const QInt& num)
 {
 	QInt res;
 
 	return res;;
 }
+
+//Toán tử <
+bool QInt::operator<(const QInt& num) const
+{
+	if (CheckSign(this->data) == 0 && CheckSign(num.data) == 1)
+	{
+		return true;
+	}
+	else if (CheckSign(this->data) == 1 && CheckSign(num.data) == 0)
+	{
+		return false;
+	}
+
+	string n1 = ConvertInt4toString(this->data);
+	string n2 = ConvertInt4toString(num.data);
+	if(n1.size() > n2.size())
+	{
+		FillZero(n2, n1.size());
+	}
+	else
+	{
+	FillZero(n1, n2.size());
+	}
+	for (int i = 0; i < n1.size(); i++)
+	{
+		if (n1[i] != n2[i])
+		{
+			return int(n1[i]) < int(n2[i]);
+		}
+	}
+}
+
+//Toán tử >
+bool QInt::operator>(const QInt& num) const
+{
+	return num < *this;
+}
+
+//Toán tử >=
+bool QInt::operator>=(const QInt& num) const
+{
+	if (*this > num || *this == num)
+	{
+		return true;
+	}
+	else return false;
+}
+
+//Toán tử <=
+bool QInt::operator<=(const QInt& num) const
+{
+	if (*this < num || *this == num)
+	{
+		return true;
+	}
+	else return false;
+}
+
+//Toán tử ==
+bool QInt::operator==(const QInt& num) const
+{
+	string n1 = ConvertInt4toString(this->data);
+	string n2 = ConvertInt4toString(num.data);
+
+	if (n1.size() == n2.size())
+	{
+		for (int i = 0; i < n1.size(); i++)
+		{
+			if (n1[i] != n2[i])
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
 int main()
 {
+	
 	QInt a, b, c;
-	a.ScanQIntDec("-1");
-	b.ScanQIntDec("1");
 
-	cout << "a bit : "; a.PrintQIntBin();
-	cout << "b bit :"; b.PrintQIntBin();
+	a.ScanQIntDec("12456");
+	b.ScanQIntDec("12456");
 
-	c = a * b;
-	cout << "c bit :"; c.PrintQIntBin();
-	cout << "c dec :";c.PrintQIntDec();
+	if (a >= b)
+	{
+		cout << "a >= b " << endl;
+	}
+	else cout << "a <= b" << endl;
+	
+	
 	return 0;
 }
