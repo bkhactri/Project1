@@ -18,15 +18,14 @@ private:
 public:
 
 	QInt();
-	QInt(string input);
 	QInt(int _data[4]);
 	QInt(const QInt& int16);
 	~QInt();
 
-	void ScanQInt();
-	void ScanQIntDec();
-	void ScanQIntBin();
-	void ScanQIntHex();
+
+	void ScanQIntDec(string);
+	void ScanQIntBin(string);
+	void ScanQIntHex(string);
 
 	void PrintQIntDec();
 	void PrintQIntBin();
@@ -39,9 +38,9 @@ public:
 	string HexToBin(string nHex); //Chuyển từ hệ 16 sang hệ 2
 
 
-	QInt operator&(const QInt& num16);
-	QInt operator|(const QInt& num16);
-	QInt operator^(const QInt& num16);
+	QInt operator&(const QInt&);
+	QInt operator|(const QInt&);
+	QInt operator^(const QInt&);
 	QInt operator~();
 
 
@@ -51,21 +50,21 @@ public:
 	QInt operator+(const QInt&);
 	QInt operator-(const QInt&);
 	QInt operator*(const QInt&);
-	QInt operator/(const QInt&);
+	QInt operator/(const QInt& );
 
 
-	QInt rol(int nBitShifted);
-	QInt ror(int nBitShifted);
+	QInt rol(int nBitRotate);
+	QInt ror(int nBitRotate);
 
 
-	bool operator==(const QInt& num16);
-	bool operator>(const QInt& num16);
-	bool operator<(const QInt& num16);
-	bool operator>=(const QInt& num16);
-	bool operator<=(const QInt& num16);
+	bool operator==(const QInt&);
+	bool operator>(const QInt&);
+	bool operator<(const QInt&);
+	bool operator>=(const QInt&);
+	bool operator<=(const QInt&);
 
 };
-bool CheckSign(int bytes[4]);
+
 string Div2(string num, char& bit);
 string ConvertToOffetTwo(string num);
 void FillZero(string& input,int nbit);
@@ -78,8 +77,9 @@ string PlusDec(string num1, string num2);
 void GetBit(int x, char bit[32]);
 void SetBit(char bit[32], int& x);
 void ConvertStringtoInt4(string a, int data[4]);
-string ConvertInt4toString(int data[4]);
-
+string ConvertInt4toString(const int data[4]);
+bool CheckSign(const int bytes[4]);
+bool IsZero(const int bytes[4]);
 
 
 

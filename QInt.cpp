@@ -20,75 +20,65 @@ QInt::QInt(const QInt& int16)
 		data[i] = int16.data[i];
 	}
 }
-QInt::QInt(string input)
-{
-	for (int i = 0; i < array_size; i++)
-	{
-		data[i] = 0;
-	}
-	int index = 0;
-	int size = input.size();
-	int type = 2; // He co so nhap vao cho mac dinh la 2
-
-	while (index < size) // Kiem tra xem input la he 16 hay khong
-	{
-		if ((input[index] >= 'A' && input[index] <= 'F') || (input[index] >= 'a' && input[index] <= 'f'))
-		{
-			type = 16;
-			break;
-		}
-		index++;
-	}
-	index = 0;
-
-	if (type != 16) // Kiem tra xem input co dung la he 2 khong
-	{
-		while (index < size)
-		{
-			if (input[index] != '1' && input[index] != '0')
-			{
-				type = 10;
-				break;
-			}
-			index++;
-		}
-	}
-	string bit_array;
-	if (type == 10)
-	{
-		bit_array = DecToBin(input);
-	}
-	else if (type == 16)
-	{
-		bit_array = HexToBin(input);
-	}
-	else if (type == 2)
-	{
-		bit_array = input;
-	}
-
-	cout << bit_array << endl;
-	/*ConvertStringtoInt4(bit_array, data);
-	for (int i = 0; i < 4; i++)
-	{
-		cout << data[i] << " ";
-	}
-	cout << endl;
-	string bit_array1 = ConvertInt4toString(data);
-	cout << bit_array1 << endl;*/
-
-}
 QInt::~QInt(){}
 
-void QInt::ScanQInt() //Nhap vo string
+
+void QInt::ScanQIntDec(string nDec)
 {
-	string num16;
-	cout << "Input : "; 
-	getline(cin, num16);
-	QInt temp(num16);
-	*this = temp;
+	string nBit=DecToBin(nDec);
+	EraseZero(nBit);
+	ConvertStringtoInt4(nBit, this->data);
+}
+void QInt::ScanQIntBin(string nBit)
+{
+	EraseZero(nBit);
+	ConvertStringtoInt4(nBit, this->data);
+}
+void QInt::ScanQIntHex(string nHex)
+{
+	string nBit = HexToBin(nHex);
+	EraseZero(nBit);
+	ConvertStringtoInt4(nBit, this->data);
 }
 
+void QInt::PrintQIntDec()
+{
+	if (IsZero(this->data) == 0)
+	{
+		cout << "0" << endl;
+	}
+	else
+	{
+		string nBit = ConvertInt4toString(this->data);
+		string nDec = BinToDec(nBit);
+		cout << nDec << endl;
+	}
+}
+void QInt::PrintQIntBin()
+{
+	if (IsZero(this->data) == 0)
+	{
+		cout << "0" << endl;
+	}
+	else
+	{
+		string nBit = ConvertInt4toString(this->data);
+		cout << nBit << endl;
+	}
+}
+void QInt::PrintQIntHex()
+{
+	if (IsZero(this->data) == 0)
+	{
+		cout << "0" << endl;
+	}
+	else 
+	{
+		string nBit = ConvertInt4toString(this->data);
+		string nHex = BinToHex(nHex);
+		cout << nHex << endl;
+	}
+}
 
 
 string QInt::DecToBin(string nDec)
@@ -252,7 +242,14 @@ string ConvertToOffetTwo(string num)
 {
 	FillZero(num, 128);
 	string temp;
-	temp += '1';
+	if (num[0] == '0')
+	{
+		temp += '1';
+	}
+	else if (num[0] == '1')
+	{
+		temp += '0';
+	}
 	for (int i = 1; i < num.size(); i++)
 	{
 		if (num[i] == '0') temp += '1';
@@ -289,8 +286,92 @@ string PlusBit(string num1, string num2)//num1 + num2
 	}
 	return res;
 }
+string MultiBit(string num1, string num2)
+{
+	string res = "0";
+	int step = 0;
+	if (num1.size() < num2.size())
+	{
+		string temp = num1;
+		num1 = num2;
+		num2 = temp;
+	}
+	for (int i = num2.size() - 1; i >= 0; i--)
+	{
+		string temp = "0";//Khai báo để lưu kết quả nhân tạm
+		if (num2[i] == '1')
+		{
+			temp = num1;
+			for (int j = 0; j < step; j++)
+			{
+					temp += '0';
+			}
+		}
+		step++;
+		res = PlusBit(res, temp);
+	}
+	EraseZero(res);
+	return res;
+}
+
+string PlusDec(string num1, string num2)
+{
+	bool sign = 0;//Biến xét dấu , 0 là + , 1 là -
+	if (num1[0] != '-' && num2[0] == '-') // num1 - num2 -> Đưa vào hàm trừ thập phân
+	{
+		num2.erase(0, 1);
+		//return SubtractDec(num1, num2);
+		return MinusDec(num1, num2);
+	};
+	if (num1[0] == '-' && num2[0] != '-') // -num1 + num2 -> Đưa vào hàm trừ thập phân num2 - num1
+	{
+		num1.erase(0, 1);
+		//return SubtractDec(num2, num1);
+		return MinusDec(num2, num1);
+	};
+	if (num1[0] != '-' && num2[0] != '-') // num1 + num2 -> Dương
+	{
+		sign = 0;
+	}
+	if (num1[0] == '-' && num2[0] == '-') // -num1 -num2 -> -(num1 + num2) (*)
+	{
+		sign = 1;
+		num1.erase(0, 1);
+		num2.erase(0, 1);
+	};
 
 
+	string res = ""; //chuỗi chứa kết quả cộng
+	int carry = 0;//Biến này để nhớ phần mượn khi cộng quá 10 (8+3 --> carry = 11-10 = 1)
+	if (num1.size() > num2.size())
+	{
+		FillZero(num2, num1.size());
+	}
+	else
+	{
+		FillZero(num1, num2.size());
+	}
+	for (int i = num1.size() - 1; i >= 0; i--)
+	{
+		int temp = (num1[i] - '0') + (num2[i] - '0') + carry;
+		res = char(temp % 10 + '0') + res;
+		carry = temp / 10;
+	}
+
+	if (carry)
+	{
+		res = char(carry + '0') + res;
+	}
+
+	if (sign == 1) // (*) -(num1 + num2)
+	{
+		res = '-' + res;
+	}
+
+
+	return res;
+
+}
 string MinusDec(string num1, string num2)
 {
 	string res = "";
@@ -307,7 +388,7 @@ string MinusDec(string num1, string num2)
 	}
 
 
-	if (strcmp(num1.c_str(), num2.c_str()) < 0) //Kiểm tra a có lớn hơn b không nếu a không lớn hơn thì đổi lại -> lúc này biết đc a-b < 0 (*)
+	if (strcmp(num1.c_str(), num2.c_str()) < 0) //Kiểm tra a có lớn hơn b không nếu a không lớn hơn b thì đổi lại -> lúc này biết đc a-b < 0 (*)
 	{
 		string temp = num1;
 		num1 = num2;
@@ -337,75 +418,7 @@ string MinusDec(string num1, string num2)
 	}
 	return res;
 }
-string PlusDec(string num1, string num2)
-{
-	bool sign = 0;//Biến xét dấu , 0 là + , 1 là -
-	if (num1[0] != '-' && num2[0] == '-') // num1 - num2 -> Đưa vào hàm trừ thập phân
-	{
-		num2.erase(0, 1);
-		//return SubtractDec(num1, num2);
-		return MinusDec(num1, num2);
-	};
-	if (num1[0] == '-' && num2[0] != '-') // -num1 + num2 -> Đưa vào hàm trừ thập phân num2 - num1
-	{
-		num1.erase(0, 1);
-		//return SubtractDec(num2, num1);
-		return MinusDec(num2, num1);
-	};
-	if (num1[0] != '-' && num2[0] != '-') // num1 + num2 -> Dương
-	{
-		sign = 0;
-	}
-	if (num1[0] == '-' && num2[0] == '-') // -num1 - num2 -> -(num1 + num2) (*)
-	{
-		sign = 1;
-		num1.erase(0, 1);
-		num2.erase(0, 1);
-	};
 
-	if (num1.length() > num2.length())//Đôi vị trí để lấy chuỗi ngắn hơn
-	{
-		swap(num1, num2);
-	}
-
-	//Đảo chuỗi để dễ thực hiện tính toán
-	reverse(num1.begin(), num1.end());
-	reverse(num2.begin(), num2.end());
-
-	string res = ""; //chuỗi chứa kết quả cộng
-	int carry = 0;//Biến này để nhớ phần mượn khi cộng quá 10 (8+3 --> carry = 11-10 = 1)
-
-	for (int i = 0; i < num1.size(); i++)
-	{
-		int temp = (num1[i] - '0') + (num2[i] - '0') + carry;
-		res += char(temp % 10 + '0');
-		carry = temp / 10;
-	}
-	//Đây bổ sung phần còn thiếu của chuỗi số dài hơn
-	for (int i = num1.size(); i < num2.size(); i++)
-	{
-
-		int temp = (num2[i] - '0') + carry;
-		res += char(temp % 10 + '0');
-		carry = temp / 10;
-	}
-	//Kiểm tra dư một lần nữa nếu khác 0 thì cho vào sau
-	if (carry)
-	{
-		res += char(carry + '0');
-	}
-	//Đảo chuỗi để nhận lại kết quả đúng
-	reverse(res.begin(), res.end());
-
-	if (sign == 1) // (*) -(num1 + num2)
-	{
-		res = '-' + res;
-	}
-
-
-	return res;
-
-}
 
 void FillZero(string& input, int nbit)
 {
@@ -469,7 +482,7 @@ void ConvertStringtoInt4(string a, int data[4])
 	delete[] temp;
 	delete[] b;
 }
-string ConvertInt4toString(int bytes[4])
+string ConvertInt4toString(const int bytes[4])
 {
 	string a;
 	char* b = new char[128];
@@ -502,7 +515,8 @@ string ConvertInt4toString(int bytes[4])
 	}
 	return a;
 }
-bool CheckSign(int bytes[4])
+//1 +, 0 -
+bool CheckSign(const int bytes[4])
 {
 	string a = ConvertInt4toString(bytes);
 	int n = a.size();
@@ -521,6 +535,19 @@ bool CheckSign(int bytes[4])
 		return 1;
 	else
 		return 0;
+}
+bool IsZero(const int bytes[4])
+{
+	bool flag = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		if (bytes[i] != 0)
+		{
+			flag = 1;
+			break;
+		}
+	}
+	return flag;
 }
 
 //operator
@@ -563,6 +590,7 @@ QInt QInt::operator<<(int nBitShifted)
 	ConvertStringtoInt4(kq, this->data);
 	return *this;
 }
+
 //Shift Right
 QInt QInt::operator>>(int nBitShifted)
 {
@@ -570,9 +598,19 @@ QInt QInt::operator>>(int nBitShifted)
 	int n = a.size();
 	string kq;
 	kq.resize(128);
-	for (int i = 0; i < nBitShifted + 128 - n; i++)
+	if (a[0] == '0')
 	{
-		kq[i] = '0';
+		for (int i = 0; i < nBitShifted + 128 - n; i++)
+		{
+			kq[i] = '0';
+		}
+	}
+	else
+	{
+		for (int i = 0; i < nBitShifted + 128 - n; i++)
+		{
+			kq[i] = '1';
+		}
 	}
 	int  j = 0;
 	for (int i = nBitShifted + 128 - n; i < 128; i++)
@@ -587,23 +625,83 @@ QInt QInt::operator>>(int nBitShifted)
 	return *this;
 }
 
+//Toán tử cộng
+QInt QInt::operator+(const QInt& num)
+{
+	QInt res;
+	string n1 = ConvertInt4toString(this->data);
+	string n2 = ConvertInt4toString(num.data);
+	string temp = PlusBit(n1, n2);
+	ConvertStringtoInt4(temp, res.data);
+	return res;
+}
 
+//Toán tử -
+QInt QInt::operator-(const QInt& num)
+{
+	QInt res;
+	string n1 = ConvertInt4toString(this->data);
+	string n2 = ConvertInt4toString(num.data);
+	n2 = ConvertToOffetTwo(n2);
+	string temp = PlusBit(n1, n2);
+	ConvertStringtoInt4(temp, res.data);
+	return res;
+}
+
+//Toán tử *
+QInt QInt::operator*(const QInt& num)
+{
+	QInt res;
+	bool sign = 0;//0 là dương , 1 là âm
+	string n1 = ConvertInt4toString(this->data);
+	string n2 = ConvertInt4toString(num.data);
+	if (CheckSign(this->data) == 0 && CheckSign(num.data) == 0)
+	{
+		n1 = ConvertToOffetTwo(n1);
+		n2 = ConvertToOffetTwo(n2);
+		EraseZero(n1);
+		EraseZero(n2);
+		sign = 0;
+	}
+	if (CheckSign(this->data) == 0 && CheckSign(num.data) != 0)
+	{
+		n1 = ConvertToOffetTwo(n1);
+		EraseZero(n1);
+		sign = 1;
+	}
+	if (CheckSign(this->data) != 0 && CheckSign(num.data) == 0)
+	{
+		n2 = ConvertToOffetTwo(n2);
+		EraseZero(n2);
+		sign = 1;
+	}
+	string temp = MultiBit(n1, n2);
+	if (sign == 1)
+	{
+		temp = ConvertToOffetTwo(temp);
+	}
+	ConvertStringtoInt4(temp, res.data);
+	return res;
+}
+
+//Toán tủ /
+QInt QInt::operator/(const QInt& num)
+{
+	QInt res;
+
+	return res;;
+}
 int main()
 {
-	QInt n;
-	int data[4] = { 0,0,0,0 };
-	string a = "-310586309";
-	string temp = n.DecToBin(a);
-	cout << temp << endl;
-	
-	ConvertStringtoInt4(temp,data);
-	
+	QInt a, b, c;
+	a.ScanQIntDec("-1");
+	b.ScanQIntDec("1");
 
-	string n1 = ConvertInt4toString(data);
-	cout << n1 << endl; 
+	cout << "a bit : "; a.PrintQIntBin();
+	cout << "b bit :"; b.PrintQIntBin();
 
-	cout << n.BinToDec(n1) << endl;
-	
-
+	c = a * b;
+	cout << "c bit :"; c.PrintQIntBin();
+	cout << "c dec :";c.PrintQIntDec();
 	return 0;
 }
