@@ -22,91 +22,41 @@ QInt::QInt(const QInt& int16)
 }
 QInt::~QInt(){}
 
-void RotateLeft(int bytes[4], int k)
+//Toán tử gán bằng QInt a,b;  a=b
+QInt& QInt::operator=(const QInt& num)
 {
-	string a = convertInt4toString(bytes);
-	int n = a.size();
-	string kq;
-	kq.resize(128);
-	if (k < 128 - n)
+	if (IsZero(this->data) == 1)
 	{
-		int j = 0;
-		for (int i = 0; i < 128 - n - k; i++)
+		for (int i = 0; i < array_size; i++)
 		{
-			kq[j++] = '0';
-		}
-		for (int i = 0; i < n; i++)
-		{
-			kq[j++] = a[i];
+			this->data[i] = 0;
 		}
 	}
 	else
 	{
-		int j = 128 - k;
-		int h = 0;
-		for (int i = 0; i < 128 - n; i++)
+		for (int i = 0; i < array_size; i++)
 		{
-			kq[j++] = '0';
-		}
-		for (int i = 0; i < k - 128 + n; i++)
-		{
-			kq[j++] = a[i];
-		}
-		for (int i = k - 128 + n; i < n; i++)
-		{
-			kq[h++] = a[i];
+			this->data[i] = num.data[i];
 		}
 	}
-	for (int i = 0; i < 4; i++)
-	{
-		bytes[i] = 0;
-	}
-	convertStringtoInt4(kq, bytes);
+	return *this;
 }
-void RotateRight(int bytes[4], int k)
+//Toán tử gán bằng QInt a;string b; a=b ;
+QInt& QInt::operator=(const string num)
 {
-	string a = convertInt4toString(bytes);
-	int n = a.size();
-	string kq;
-	kq.resize(128);
-	if (k < n)
+	if (num == "" || num == " ")
 	{
-		int j = 0;
-		for (int i = n - k; i < n; i++)
-		{
-			kq[j++] = a[i];
-		}
-		for (int i = 0; i < 128 - n; i++)
-		{
-			kq[j++] = '0';
-		}
-		for (int i = 0; i < n - k; i++)
-		{
-			kq[j++] = a[i];
-		}
+		cout << "Khong co du lieu hay nhap du lieu la so thap phan" << endl;
+		return *this;
 	}
 	else
 	{
-		int j = 0;
-		for (int i = 0; i < k - n; i++)
-		{
-			kq[j++] = '0';
-		}
-		for (int i = 0; i < n; i++)
-		{
-			kq[j++] = a[i];
-		}
-		for (int i = 0; i < 128 - k; i++)
-		{
-			kq[j++] = '0';
-		}
+		string temp = DecToBin(num);
+		ConvertStringtoInt4(temp, this->data);
 	}
-	for (int i = 0; i < 4; i++)
-	{
-		bytes[i] = 0;
-	}
-	convertStringtoInt4(kq, bytes);
+	return *this;
 }
+
 void QInt::ScanQIntDec(string nDec)
 {
 	string nBit=DecToBin(nDec);
@@ -165,6 +115,7 @@ void QInt::PrintQIntHex()
 }
 
 
+//Chuyển từ hệ 10 sang hệ 2
 string QInt::DecToBin(string nDec)
 {	
 	int status = 1;
@@ -188,6 +139,7 @@ string QInt::DecToBin(string nDec)
 	}
 	return bit_array;
 }
+//Chuyển từ hệ 16 sang hệ 2
 string QInt::HexToBin(string nHex)
 {
 	string bit_array;
@@ -212,12 +164,14 @@ string QInt::HexToBin(string nHex)
 	}
 	return bit_array;
 }
+//Chuyển từ hệ 10 sang hệ 16
 string QInt::DecToHex(string nDec)
 {
 	string Temp = DecToBin(nDec);
 	string res = BinToHex(Temp);
 	return res;
 }
+//Chuyển từ hệ 2 sang hệ 10
 string QInt::BinToDec(string bit)
 {
 	string nDec = "0";
@@ -238,6 +192,7 @@ string QInt::BinToDec(string bit)
 	}
 	return nDec;
 }
+//Chuyển từ hệ 2 sang hệ 16
 string QInt::BinToHex(string bit)
 {
 	string nHex, temp;
@@ -273,7 +228,7 @@ string QInt::BinToHex(string bit)
 	return nHex;
 }
 
-
+//Hàm chia 2 (tính theo số thập phân)
 string Div2(const string num,char &bit)
 {
 	string res;
@@ -296,6 +251,7 @@ string Div2(const string num,char &bit)
 	else bit = 0;
 	return res;
 }
+//Hàm tính 2^(repeat) (tính theo số thập phân)
 string Multi2(int repeat)
 {
 	string res = "1";
@@ -319,6 +275,7 @@ string Multi2(int repeat)
 	}
 	return res;
 }
+//Hàm chuyển đồi số phù 2 (số dương -> bù 1 + 1 -> số âm , số ấm -> bù 1 + 1 -> số dương)
 string ConvertToOffetTwo(string num)
 {
 	FillZero(num, 128);
@@ -339,6 +296,7 @@ string ConvertToOffetTwo(string num)
 	temp = PlusBit(temp, "1");
 	return temp;
 }
+//Hàm cộng bit (xử lý bit) num1+num2
 string PlusBit(string num1, string num2)//num1 + num2
 {
 	int sur_bit = 0;
@@ -366,6 +324,7 @@ string PlusBit(string num1, string num2)//num1 + num2
 	}
 	return res;
 }
+//Hàm nhân bit (xử lý bit) num1*num2
 string MultiBit(string num1, string num2)
 {
 	string res = "0";
@@ -393,6 +352,44 @@ string MultiBit(string num1, string num2)
 	EraseZero(res);
 	return res;
 }
+//Hàm chia bit (xử lý bit) num1/num2
+string DivBit(string num1, string num2)
+{
+	string res;
+	string negativeNum2 = ConvertToOffetTwo(num2);
+	if (num1.size() < num2.size())
+	{
+		res = "0";
+	}
+	else
+	{
+		string carry, temp; // carry nắm giữ chuỗi bit dư , temp dùng lưu trữ hiệu 2 chuỗi bit mỗi lần chia
+		for (int i = 0; i < num1.size(); i++)
+		{
+			carry += num1[i];
+			if (carry.size() < num2.size())
+			{
+				res += "0";
+			}
+			else if (carry.size() >= num2.size() && CompareBit(carry, num2) == 0)
+			{
+				res += "1";
+				temp = PlusBit(carry, negativeNum2);
+				carry = temp;
+				EraseZero(carry);
+			}
+			else res += "0";
+		}
+		if (carry.size() >= num2.size())
+		{
+			string temp = DivBit(carry, num2);
+			res += temp;
+		}	
+	}
+	EraseZero(res);
+	return res;
+}
+//Hàm cộng số thập phân
 string PlusDec(string num1, string num2)
 {
 	bool sign = 0;//Biến xét dấu , 0 là + , 1 là -
@@ -451,6 +448,7 @@ string PlusDec(string num1, string num2)
 	return res;
 
 }
+//Hàm trừ số thập phân
 string MinusDec(string num1, string num2)
 {
 	string res = "";
@@ -499,6 +497,7 @@ string MinusDec(string num1, string num2)
 }
 
 
+//Hàm thêm 0 vào đầu chuỗi
 void FillZero(string& input, int nbit)
 {
 	while (input.size() % nbit != 0)
@@ -506,6 +505,7 @@ void FillZero(string& input, int nbit)
 		input.insert(0, "0");
 	}
 }
+//Hàm xoá 0 đầu chuỗi
 void EraseZero(string& num)
 {
 	while (num[0] == '0')
@@ -515,7 +515,7 @@ void EraseZero(string& num)
 }
 
 
-//Ừng Văn Tuấn 
+
 void GetBit(int x, char bit[32])
 {
 	for (int i = 0; i < 32; i++)
@@ -561,42 +561,49 @@ void ConvertStringtoInt4(string a, int data[4])
 	delete[] temp;
 	delete[] b;
 }
-string ConvertInt4toString(const int bytes[4])
+string ConvertInt4toString(const int data[4])
 {
 	string a;
-	char* b = new char[128];
-	char* temp = new char[32];
-	int h = 0;
-	for (int i = 0; i < 4; i++)
+	if (IsZero(data) == 0)
 	{
-		GetBit(bytes[i], temp);
-		for (int j = 0; j < 32; j++)
-		{
-			b[h++] = temp[j];
-		}
+		a += "0";
 	}
-	int slbit = 0;
-	int flag = 0;
-	for (int i = 0; i < 128; i++)
+	else
 	{
-		if (b[i] == 1)
+		char* b = new char[128];
+		char* temp = new char[32];
+		int h = 0;
+		for (int i = 0; i < 4; i++)
 		{
-			flag = 1;
-			slbit = 128 - i;
-			break;
+			GetBit(data[i], temp);
+			for (int j = 0; j < 32; j++)
+			{
+				b[h++] = temp[j];
+			}
 		}
-	}
-	a.resize(slbit);
-	int c = 0;
-	for (int i = 128 - slbit; i < 128; i++)
-	{
-		a[c++] = b[i] + 48;
+		int slbit = 0;
+		int flag = 0;
+		for (int i = 0; i < 128; i++)
+		{
+			if (b[i] == 1)
+			{
+				flag = 1;
+				slbit = 128 - i;
+				break;
+			}
+		}
+		a.resize(slbit);
+		int c = 0;
+		for (int i = 128 - slbit; i < 128; i++)
+		{
+			a[c++] = b[i] + 48;
+		}
 	}
 	return a;
 }
-bool CheckSign(const int bytes[4])
+bool CheckSign(const int data[4])
 {
-	string a = ConvertInt4toString(bytes);
+	string a = ConvertInt4toString(data);
 	if ((a[0] == '0' || a[0] == '1') && a.size() != 128)
 	{
 		return 1;
@@ -606,12 +613,12 @@ bool CheckSign(const int bytes[4])
 		return 0;
 	}
 }
-bool IsZero(const int bytes[4])
+bool IsZero(const int data[4])
 {
 	bool flag = 0;
 	for (int i = 0; i < 4; i++)
 	{
-		if (bytes[i] != 0)
+		if (data[i] != 0)
 		{
 			flag = 1;
 			break;
@@ -619,7 +626,24 @@ bool IsZero(const int bytes[4])
 	}
 	return flag;
 }
-
+bool CompareBit(string n1, string n2)
+{
+	if (n1.size() > n2.size())
+	{
+		FillZero(n2, n1.size());
+	}
+	else
+	{
+		FillZero(n1, n2.size());
+	}
+	for (int i = 0; i < n1.size(); i++)
+	{
+		if (n1[i] != n2[i])
+		{
+			return int(n1[i]) < int(n2[i]);
+		}
+	}
+}
 
 
 
@@ -728,6 +752,8 @@ QInt QInt::operator~()
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
+
+
 //Shift Left
 QInt QInt::operator<<(int nBitShifted)
 {
@@ -799,58 +825,73 @@ QInt QInt::operator>>(int nBitShifted)
 	ConvertStringtoInt4(kq, this->data);
 	return *this;
 }
+
+
 //Toán tử cộng
 QInt QInt::operator+(const QInt& num)
 {
+	// a + b
 	QInt res;
-	string n1 = ConvertInt4toString(this->data);
-	string n2 = ConvertInt4toString(num.data);
-	string temp = PlusBit(n1, n2);
+	string a = ConvertInt4toString(this->data);
+	string b = ConvertInt4toString(num.data);
+	string temp = PlusBit(a, b);
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
 //Toán tử -
 QInt QInt::operator-(const QInt& num)
 {
+	// a - b
 	QInt res;
-	string n1 = ConvertInt4toString(this->data);
-	string n2 = ConvertInt4toString(num.data);
-	n2 = ConvertToOffetTwo(n2);
-	string temp = PlusBit(n1, n2);
+	string a = ConvertInt4toString(this->data);
+	string b = ConvertInt4toString(num.data);
+	b = ConvertToOffetTwo(b);
+	string temp = PlusBit(a, b);
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
 //Toán tử *
 QInt QInt::operator*(const QInt& num)
 {
+	// a * b
 	QInt res;
 	bool sign = 0;//0 là dương , 1 là âm
-	string n1 = ConvertInt4toString(this->data);
-	string n2 = ConvertInt4toString(num.data);
-	if (CheckSign(this->data) == 0 && CheckSign(num.data) == 0)
+	bool aSign = CheckSign(this->data);
+	bool bSign = CheckSign(num.data);
+	string a = ConvertInt4toString(this->data);
+	string b = ConvertInt4toString(num.data);
+	string temp;
+	if (IsZero(this->data) == 0 || IsZero(num.data) == 0)
 	{
-		n1 = ConvertToOffetTwo(n1);
-		n2 = ConvertToOffetTwo(n2);
-		EraseZero(n1);
-		EraseZero(n2);
-		sign = 0;
+		temp = "0";
 	}
-	if (CheckSign(this->data) == 0 && CheckSign(num.data) != 0)
+	else
 	{
-		n1 = ConvertToOffetTwo(n1);
-		EraseZero(n1);
-		sign = 1;
-	}
-	if (CheckSign(this->data) != 0 && CheckSign(num.data) == 0)
-	{
-		n2 = ConvertToOffetTwo(n2);
-		EraseZero(n2);
-		sign = 1;
-	}
-	string temp = MultiBit(n1, n2);
-	if (sign == 1)
-	{
-		temp = ConvertToOffetTwo(temp);
+		if (aSign == 0 && bSign == 0)
+		{
+			a = ConvertToOffetTwo(a);
+			b = ConvertToOffetTwo(b);
+			EraseZero(a);
+			EraseZero(b);
+			sign = 0;
+		}
+		if (aSign == 0 && bSign != 0)
+		{
+			a = ConvertToOffetTwo(a);
+			EraseZero(a);
+			sign = 1;
+		}
+		if (aSign != 0 && bSign == 0)
+		{
+			b = ConvertToOffetTwo(b);
+			EraseZero(b);
+			sign = 1;
+		}
+		temp = MultiBit(a, b);
+		if (sign == 1)
+		{
+			temp = ConvertToOffetTwo(temp);
+		}
 	}
 	ConvertStringtoInt4(temp, res.data);
 	return res;
@@ -858,10 +899,146 @@ QInt QInt::operator*(const QInt& num)
 //Toán tử /
 QInt QInt::operator/(const QInt& num)
 {
+	// a / b
 	QInt res;
+	bool sign = 0;//0 là dương , 1 là âm
+	string a = ConvertInt4toString(this->data);
+	string b = ConvertInt4toString(num.data);
+	bool aSign = CheckSign(this->data);
+	bool bSign = CheckSign(num.data);
+	string temp;
+	if (IsZero(this->data) == 0)
+	{
+		temp = "0";
+	}
+	if (IsZero(num.data) == 0)
+	{
+		cout << "#######";
+		exit(0) ;
+	}
 
-	return res;;
+	if (aSign == 0 && bSign == 0)
+	{
+		a = ConvertToOffetTwo(a);
+		b = ConvertToOffetTwo(b);
+		EraseZero(a);
+		EraseZero(b);
+		sign = 0;
+	}
+	if (aSign == 0 && bSign != 0)
+	{
+		a = ConvertToOffetTwo(a);
+		EraseZero(a);
+		sign = 1;
+	}
+	if (aSign != 0 && bSign == 0)
+	{
+		b = ConvertToOffetTwo(b);
+		EraseZero(b);
+		sign = 1;
+	}
+
+	temp = DivBit(a, b); //Thực hiện phép chia
+
+	if (sign == 1) //Xét điều kiện để thêm -
+	{
+		temp = ConvertToOffetTwo(temp);
+	}
+	ConvertStringtoInt4(temp, res.data);
+	return res;
 }
+
+
+//Xoay trái
+QInt QInt::rol(int nBitRotate)
+{
+	string a = ConvertInt4toString(this->data);
+	int n = a.size();
+	string kq;
+	kq.resize(128);
+	if (nBitRotate < 128 - n)
+	{
+		int j = 0;
+		for (int i = 0; i < 128 - n - nBitRotate; i++)
+		{
+			kq[j++] = '0';
+		}
+		for (int i = 0; i < n; i++)
+		{
+			kq[j++] = a[i];
+		}
+	}
+	else
+	{
+		int j = 128 - nBitRotate;
+		int h = 0;
+		for (int i = 0; i < 128 - n; i++)
+		{
+			kq[j++] = '0';
+		}
+		for (int i = 0; i < nBitRotate - 128 + n; i++)
+		{
+			kq[j++] = a[i];
+		}
+		for (int i = nBitRotate - 128 + n; i < n; i++)
+		{
+			kq[h++] = a[i];
+		}
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		this->data[i] = 0;
+	}
+	ConvertStringtoInt4(kq, this->data);
+	return *this;
+}
+//Xoay phải
+QInt QInt::ror(int nBitRotate)
+{
+	string a = ConvertInt4toString(this->data);
+	int n = a.size();
+	string kq;
+	kq.resize(128);
+	if (nBitRotate < n)
+	{
+		int j = 0;
+		for (int i = n - nBitRotate; i < n; i++)
+		{
+			kq[j++] = a[i];
+		}
+		for (int i = 0; i < 128 - n; i++)
+		{
+			kq[j++] = '0';
+		}
+		for (int i = 0; i < n - nBitRotate; i++)
+		{
+			kq[j++] = a[i];
+		}
+	}
+	else
+	{
+		int j = 0;
+		for (int i = 0; i < nBitRotate - n; i++)
+		{
+			kq[j++] = '0';
+		}
+		for (int i = 0; i < n; i++)
+		{
+			kq[j++] = a[i];
+		}
+		for (int i = 0; i < 128 - nBitRotate; i++)
+		{
+			kq[j++] = '0';
+		}
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		this->data[i] = 0;
+	}
+	ConvertStringtoInt4(kq, this->data);
+	return *this;
+}
+
 
 //Toán tử <
 bool QInt::operator<(const QInt& num) const
@@ -877,29 +1054,13 @@ bool QInt::operator<(const QInt& num) const
 
 	string n1 = ConvertInt4toString(this->data);
 	string n2 = ConvertInt4toString(num.data);
-	if(n1.size() > n2.size())
-	{
-		FillZero(n2, n1.size());
-	}
-	else
-	{
-	FillZero(n1, n2.size());
-	}
-	for (int i = 0; i < n1.size(); i++)
-	{
-		if (n1[i] != n2[i])
-		{
-			return int(n1[i]) < int(n2[i]);
-		}
-	}
+	return CompareBit(n1, n2);
 }
-
 //Toán tử >
 bool QInt::operator>(const QInt& num) const
 {
 	return num < *this;
 }
-
 //Toán tử >=
 bool QInt::operator>=(const QInt& num) const
 {
@@ -909,7 +1070,6 @@ bool QInt::operator>=(const QInt& num) const
 	}
 	else return false;
 }
-
 //Toán tử <=
 bool QInt::operator<=(const QInt& num) const
 {
@@ -919,7 +1079,6 @@ bool QInt::operator<=(const QInt& num) const
 	}
 	else return false;
 }
-
 //Toán tử ==
 bool QInt::operator==(const QInt& num) const
 {
@@ -940,20 +1099,23 @@ bool QInt::operator==(const QInt& num) const
 	return false;
 }
 
+
 int main()
 {
 	
 	QInt a, b, c;
 
-	a.ScanQIntDec("12456");
-	b.ScanQIntDec("12456");
+	a = "36446868780624476630340083329890";
+	b = "3191122320557494";
+	a.PrintQIntDec();
+	b.PrintQIntDec(); 
 
-	if (a >= b)
-	{
-		cout << "a >= b " << endl;
-	}
-	else cout << "a <= b" << endl;
+	c = a / b;
+
+	c.PrintQIntDec();
 	
 	
+	
+
 	return 0;
 }

@@ -22,6 +22,8 @@ public:
 	QInt(const QInt& int16);
 	~QInt();
 
+	QInt& operator=(const QInt&);
+	QInt& operator=(const string);
 
 	void ScanQIntDec(string);
 	void ScanQIntBin(string);
@@ -31,11 +33,13 @@ public:
 	void PrintQIntBin();
 	void PrintQIntHex();
 
+
 	string DecToBin(string nDec); //Chuyển từ hệ 10 sang hệ 2
+	string HexToBin(string nHex); //Chuyển từ hệ 16 sang hệ 2
 	string DecToHex(string nHex); //Chuyển từ hệ 10 sang hệ 16
 	string BinToDec(string bit);  //Chuyển từ hệ 2 sang hệ 10
 	string BinToHex(string bit);  //Chuyển từ hệ 2 sang hệ 16
-	string HexToBin(string nHex); //Chuyển từ hệ 16 sang hệ 2
+	
 
 
 	QInt operator&(const QInt&);
@@ -70,6 +74,7 @@ string ConvertToOffetTwo(string num);
 void FillZero(string& input,int nbit);
 void EraseZero(string& nHex);
 string PlusBit(string num1, string num2);
+string DivBit(string num1, string num2);
 string Multi2(int repeat);
 string MinusDec(string num1, string num2);
 string PlusDec(string num1, string num2);
@@ -80,6 +85,7 @@ void ConvertStringtoInt4(string a, int data[4]);
 string ConvertInt4toString(const int data[4]);
 bool CheckSign(const int bytes[4]);
 bool IsZero(const int bytes[4]);
+bool CompareBit(string num1, string num2);
 
 
 
