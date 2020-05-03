@@ -22,7 +22,91 @@ QInt::QInt(const QInt& int16)
 }
 QInt::~QInt(){}
 
-
+void RotateLeft(int bytes[4], int k)
+{
+	string a = convertInt4toString(bytes);
+	int n = a.size();
+	string kq;
+	kq.resize(128);
+	if (k < 128 - n)
+	{
+		int j = 0;
+		for (int i = 0; i < 128 - n - k; i++)
+		{
+			kq[j++] = '0';
+		}
+		for (int i = 0; i < n; i++)
+		{
+			kq[j++] = a[i];
+		}
+	}
+	else
+	{
+		int j = 128 - k;
+		int h = 0;
+		for (int i = 0; i < 128 - n; i++)
+		{
+			kq[j++] = '0';
+		}
+		for (int i = 0; i < k - 128 + n; i++)
+		{
+			kq[j++] = a[i];
+		}
+		for (int i = k - 128 + n; i < n; i++)
+		{
+			kq[h++] = a[i];
+		}
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		bytes[i] = 0;
+	}
+	convertStringtoInt4(kq, bytes);
+}
+void RotateRight(int bytes[4], int k)
+{
+	string a = convertInt4toString(bytes);
+	int n = a.size();
+	string kq;
+	kq.resize(128);
+	if (k < n)
+	{
+		int j = 0;
+		for (int i = n - k; i < n; i++)
+		{
+			kq[j++] = a[i];
+		}
+		for (int i = 0; i < 128 - n; i++)
+		{
+			kq[j++] = '0';
+		}
+		for (int i = 0; i < n - k; i++)
+		{
+			kq[j++] = a[i];
+		}
+	}
+	else
+	{
+		int j = 0;
+		for (int i = 0; i < k - n; i++)
+		{
+			kq[j++] = '0';
+		}
+		for (int i = 0; i < n; i++)
+		{
+			kq[j++] = a[i];
+		}
+		for (int i = 0; i < 128 - k; i++)
+		{
+			kq[j++] = '0';
+		}
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		bytes[i] = 0;
+	}
+	convertStringtoInt4(kq, bytes);
+}
 void QInt::ScanQIntDec(string nDec)
 {
 	string nBit=DecToBin(nDec);
