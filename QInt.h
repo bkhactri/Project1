@@ -26,12 +26,17 @@ public:
 	QInt& operator=(const QInt&);
 	QInt& operator=(const string);
 
-	//Hàm đọc cái chuỗi số
+	//Hàm xuất cho UI
+	string Print_QIntDec();
+	string Print_QIntBin();
+	string Print_QIntHex();
+
+	//Hàm đọc chuỗi số
 	void ScanQIntDec(string); //Hệ 10
 	void ScanQIntBin(string); //Hệ 2
 	void ScanQIntHex(string); //Hệ 16
 
-	//Hàm in cái chuỗi số
+	//Hàm in chuỗi số
 	void PrintQIntDec(); //Hệ 10
 	void PrintQIntBin(); //Hệ 2
 	void PrintQIntHex(); //Hệ 16

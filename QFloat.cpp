@@ -1,8 +1,7 @@
 ﻿#include "QFloat.h"
 
 QFloat::QFloat(string FloatStringdata, int He)
-{
-	if (He == 2)
+{	if (He == 2)
 	{
 		ConvertBinStringtoFloat(FloatStringdata, data);
 	}
@@ -11,7 +10,8 @@ QFloat::QFloat(string FloatStringdata, int He)
 		string bin = DecToBin(FloatStringdata);
 		if (bin[0] != '0' && bin[0] != '1')
 		{
-			throw bin;
+			cout << bin;
+			exit(0);
 		}
 		else
 		{
@@ -76,7 +76,7 @@ string QFloat::BinToDec(string binQfloat)
 		binQfloat.push_back('0');
 	}
 	//tach ra thanh 3 phan
-	string sign = binQfloat.substr(0, 1);
+	string sign = binQfloat.substr(0,1);
 	string exponent = binQfloat.substr(1, 15);
 	string significant = binQfloat.substr(16, binQfloat.size());
 
@@ -86,7 +86,7 @@ string QFloat::BinToDec(string binQfloat)
 	bool infinity = true;
 	bool NaN = true;
 
-
+	
 	int exponentnumber(0); // lay gia tri so mu
 
 	for (int i = exponent.size() - 1; i >= 0; i--)
@@ -99,7 +99,7 @@ string QFloat::BinToDec(string binQfloat)
 
 	exponentnumber -= (pow(2, 14) - 1);
 
-	if (exponentnumber == 1)
+	if (exponentnumber != 0)
 	{
 		zero = false;
 		denormalized = false;
@@ -154,7 +154,7 @@ string QFloat::BinToDec(string binQfloat)
 		fraction = significant.substr(exponentnumber, exponentnumber);
 	}
 	else
-	{
+	{	
 		if (exponentnumber > 112)
 		{
 			wholes = '1' + significant;
@@ -177,7 +177,7 @@ string QFloat::BinToDec(string binQfloat)
 	{
 		wholes = '-' + WholesToDec(wholes);
 	}
-
+	
 	fraction = FractionsToDec(fraction);
 
 	return wholes + '.' + fraction;
@@ -185,7 +185,7 @@ string QFloat::BinToDec(string binQfloat)
 string QFloat::DecToBin(string decQfloat)
 {
 	string bit;
-
+	
 	if (decQfloat[0] == '-') // xu ly bit dấu
 	{
 		decQfloat = decQfloat.substr(1, decQfloat.size());
@@ -203,18 +203,19 @@ string QFloat::DecToBin(string decQfloat)
 	//bien nhi phan
 	if (decQfloat.size() == 1 && decQfloat[0] == '0')
 	{
-		return "Zero"; // xac dinh truong hop zero
+		return "Zero"; // xác định trường hợp zero
 	}
-
+	
 	int point = decQfloat.find('.');
-
+	
 	string binQfloat;
 	if (point == -1)
 	{
-		binQfloat += WholesToBin(decQfloat); // không tim duoc dau cham co nghia la 123455
+		binQfloat += WholesToBin(decQfloat); // không tìm được dâu chấm tức có dạng 123456485
+	}
 	else
 	{
-		string wholes = decQfloat.substr(0, point); //tim duoc thi tach lam hai phan 123456.1234567 -> 123456 & 0.1234567
+		string wholes = decQfloat.substr(0,point); // tìm được thì tách làm 2 phần 123456.1234567 -> 123456 & 0.1234567
 		string fraction = '0' + decQfloat.substr(point, decQfloat.size());
 
 		string wholesbin = WholesToBin(wholes);
@@ -252,7 +253,7 @@ string QFloat::DecToBin(string decQfloat)
 	{
 		if (point > 1)
 		{
-
+			
 			string wholes = binQfloat.substr(0, point);
 			string fraction = binQfloat.substr(point + 1, binQfloat.size());
 			exponent = wholes.size() - 1 + pow(2, 14) - 1;
@@ -314,7 +315,7 @@ void ConvertBinStringtoFloat(string bin, int data[4])
 }
 string ConvertFloattoBinString(int data[4])
 {
-	string b(128, 0);
+	string b(128,0);
 	char* tmp = new char[32];
 	int h = 0;
 
@@ -399,7 +400,7 @@ string FractionsToBin(string frac, int numoffractions) // a.cdef frac co dang 0.
 	{
 		if (frac == "0.0" || frac == "1.0")
 		{
-			if (frac == "0.0")	bit += '0';
+			if(frac == "0.0")	bit += '0';
 			else
 			{
 				bit += '1';
@@ -411,7 +412,7 @@ string FractionsToBin(string frac, int numoffractions) // a.cdef frac co dang 0.
 		for (int i = frac.size() - 1; i >= 0; i--)
 		{
 			int mul2 = (int(frac[i]) - 48) * 2 + memo;
-
+			
 			if (frac[i] != '.')
 			{
 				if (mul2 >= 10)
@@ -464,7 +465,7 @@ void StandardizedStringFloat(string& decQfloat) // chuan hoa chuoi QFloat(dec) 0
 	int point = decQfloat.find('.');
 	if (point == -1)
 	{
-		StandardizedWholes(decQfloat);
+		StandardizedWholes(decQfloat); //Chỉ chuẩn hoá phần nguyên
 	}
 	else
 	{
@@ -606,8 +607,22 @@ string WholesToDec(string bit) //phan nguyen tu nhi phan sang thap phan
 }
 
 
-//Ham chua hoan thanh
-string FractionsToDec(string bin) // ham chuyen thap phan sang dec bin dang 0000001010111101 cua phan thap phan
+string FractionsToDec(string bin) // ham chuyen thap phan sang dec bin dang 0000001010111101 của phần thập phân
 {
+	
 	return bin;
+}
+string PowNegative2(int repeat)
+{
+	string res = "1";
+	double temp = 0;
+	for (int i = 0; i < repeat; i++)
+	{
+		for (int j = res.size() - 1; j >= 0; j--)
+		{
+			temp = (res[j] - '0') / 2;
+			
+		}
+	}
+	return res;
 }

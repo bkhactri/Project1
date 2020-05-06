@@ -22,6 +22,52 @@ QInt::QInt(const QInt& int16)
 }
 QInt::~QInt(){}
 
+//Hàm in ra giao diện chuỗi số hệ 10
+string QInt::Print_QIntDec()
+{
+	if (IsZero(this->data) == 1)
+	{
+		string s = "0";
+		return s;
+	}
+	else
+	{
+		string nBit = ConvertInt4toString(this->data);
+		string nDec = BinToDec(nBit);
+		return nDec;
+	}
+}
+//Hàm in ra giao diện chuỗi số hệ 2
+string QInt::Print_QIntBin()
+{
+	if (IsZero(this->data) == 1)
+	{
+		string s = "0";
+		return s;
+	}
+	else
+	{
+		string nBit = ConvertInt4toString(this->data);
+		return nBit;
+	}
+}
+//Hàm in ra giao diện chuỗi số hệ 16
+string QInt::Print_QIntHex()
+{
+	if (IsZero(this->data) == 1)
+	{
+		string s = "0";
+		return s;
+	}
+	else
+	{
+		string nBit = ConvertInt4toString(this->data);
+		string nHex = BinToHex(nBit);
+		return nHex;
+	}
+}
+
+
 //Toán tử gán bằng QInt a,b;  a=b
 QInt& QInt::operator=(const QInt& num)
 {
@@ -63,36 +109,25 @@ QInt& QInt::operator=(const string num)
 	return *this;
 }
 
+
+//Hàm đọc chuỗi hệ 10 sau đó chuyển sang hệ 2 rồi lưu trữ vào data[4]
 void QInt::ScanQIntDec(string nDec)
 {
 	string nBit=DecToBin(nDec);
 	EraseZero(nBit);
-	if (nBit.size() > 128)
-	{
-		cout << "Invalid input" << endl;
-		exit(0);
-	}
 	ConvertStringtoInt4(nBit, this->data);
 }
+//Hàm đọc chuỗi  hệ 2 rồi lưu trữ vào data[4]
 void QInt::ScanQIntBin(string nBit)
 {
-	if (nBit.size() > 128)
-	{
-		cout << "Invalid input" << endl;
-		exit(0);
-	}
 	EraseZero(nBit);
 	ConvertStringtoInt4(nBit, this->data);
 }
+//Hàm đọc chuỗi hệ 16 sau đó chuyển sang hệ 2 rồi lưu trữ vào data[4]
 void QInt::ScanQIntHex(string nHex)
 {
 	string nBit = HexToBin(nHex);
 	EraseZero(nBit);
-	if (nBit.size() > 128)
-	{
-		cout << "Invalid input" << endl;
-		exit(0);
-	}
 	ConvertStringtoInt4(nBit, this->data);
 }
 
@@ -532,7 +567,6 @@ QInt QInt::operator/(const QInt& num)
 	if (IsZero(num.data) == 1)//mấu =0 -> không thể chia
 	{
 		cout << "Invalid ouput";
-		exit(0);
 	}
 	//Kiểm tra dấu như toán tử nhân
 	if (aSign == 0 && bSign == 0)
@@ -1144,27 +1178,3 @@ bool CompareBit(string num1, string num2)
 	}
 }
 
-
-
-int main()
-{
-	
-	QInt a, b, c;
-
-	a = "124324328458534534954375734587398234576435643756345649534646546543454654765786587697696789756745676";
-	b = "0";
-	a.PrintQIntDec();
-	b.PrintQIntDec(); 
-
-	c = a / b;
-
-	c.PrintQIntDec();
-
-	cout << Multi2(14);
-	
-	
-	
-	
-
-	return 0;
-}
