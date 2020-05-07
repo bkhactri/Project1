@@ -1,18 +1,21 @@
 ﻿#include "QFloat.h"
-#include"QInt.h"
 
 QFloat::QFloat(string FloatStringdata, int He)
-{	if (He == 2)
+{
+	for (int i = 0; i < arraysize; i++)
+	{
+		data[i] = 0;
+	}
+	if (He == 2)
 	{
 		ConvertBinStringtoFloat(FloatStringdata, data);
 	}
 	else
 	{
 		string bin = DecToBin(FloatStringdata);
-		if (bin[0] != '0' && bin[0] != '1')
+		if (bin[0] != '0' && bin[0] != '1' || (bin.size() == 1 && bin[0] == '0'))
 		{
-			cout << bin;
-			exit(0);
+			cout << bin << endl;
 		}
 		else
 		{
@@ -20,25 +23,11 @@ QFloat::QFloat(string FloatStringdata, int He)
 		}
 	}
 }
-QFloat::QFloat(string FloatStringdata)
+QFloat::QFloat()
 {
-	int he(2);
-
-	for (int i = 0; i < int(FloatStringdata.size()); ++i)
+	for (int i = 0; i < arraysize; i++)
 	{
-		if (FloatStringdata[i] == '.' || (FloatStringdata[i] != '0' && FloatStringdata[i] != '1'))
-		{
-			he = 10;
-		}
-	}
-
-	if (he == 2)
-	{
-		*this = QFloat(FloatStringdata, 2);
-	}
-	else
-	{
-		*this = QFloat(FloatStringdata, 10);
+		data[i] = 0;
 	}
 }
 QFloat::QFloat(int datatmp[4])
@@ -55,29 +44,31 @@ QFloat::QFloat(const QFloat& datatmp)
 		data[i] = datatmp.data[i];
 	}
 }
-
 void QFloat::ScanQFloat()
 {
 	string datatmp;
-	cout << "Data: " << endl;
-
+	int he(2);
+	cout << "He: "; cin >> he;
+	cout << "Data: ";
 	fflush(stdin); getline(cin, datatmp);
-
-	*this = QFloat(datatmp);
+	*this = QFloat(datatmp, he); // khoi tao qfloat
 }
-void QFloat::PrintQFloat()
+string QFloat::PrintQFloat(int fraction) // xuat qfloat
 {
-	cout << BinToDec(ConvertFloattoBinString(data));
+	string tmp = ConvertFloattoBinString(data); //chuyen day nhi phan trong data thanh chuoi nhi phan
+	return BinToDec(tmp, fraction); //tra ve gia tri bien doi nhi phan -> dec
 }
-string QFloat::BinToDec(string binQfloat)
+string QFloat::BinToDec(string binQfloat, int numofele) // binqfloat day nhi phan, nummofele soluong phan tu duoc in ra man hinh
 {
 	// chuan hoa bit de co du 128 bit;
 	while (binQfloat.size() < 128)
 	{
 		binQfloat.push_back('0');
 	}
+	binQfloat = binQfloat.substr(0, 128);
+
 	//tach ra thanh 3 phan
-	string sign = binQfloat.substr(0,1);
+	string sign = binQfloat.substr(0, 1);
 	string exponent = binQfloat.substr(1, 15);
 	string significant = binQfloat.substr(16, binQfloat.size());
 
@@ -86,8 +77,6 @@ string QFloat::BinToDec(string binQfloat)
 	bool denormalized = true;
 	bool infinity = true;
 	bool NaN = true;
-
-	
 	int exponentnumber(0); // lay gia tri so mu
 
 	for (int i = exponent.size() - 1; i >= 0; i--)
@@ -97,39 +86,36 @@ string QFloat::BinToDec(string binQfloat)
 			exponentnumber += pow(2, exponent.size() - 1 - i);
 		}
 	}
-
 	exponentnumber -= (pow(2, 14) - 1);
-
-	if (exponentnumber != 0)
+	//kiem tra dieu kien
+	for (int i = 0; i < exponent.size(); i++)
 	{
-		zero = false;
-		denormalized = false;
+		if (exponent[i] == '0')
+		{
+			NaN = false;
+			infinity = false;
+		}
+		if (exponent[i] == '1')
+		{
+			zero = false;
+			denormalized = false;
+		}
 	}
-	if (exponentnumber == 0)
-	{
-		infinity = false;
-		NaN = false;
-	}
-
+	bool flag = false;
 	for (int i = 0; i < significant.size(); i++)
 	{
 		if (significant[i] == '1')
 		{
 			zero = false;
 			infinity = false;
-		}
-		if (significant[i] == '0')
-		{
-			denormalized = false;
-			NaN = false;
+			flag = true;
 		}
 	}
-
 	if (zero)
 	{
-		return "Zero";
+		return "0";
 	}
-	if (denormalized)
+	if (denormalized && flag)
 	{
 		return "Denormalized";
 	}
@@ -137,39 +123,46 @@ string QFloat::BinToDec(string binQfloat)
 	{
 		return "Infinity";
 	}
-	if (NaN)
+	if (NaN && flag)
 	{
 		return "NaN - Not a Number";
 	}
+
 	//xu ly de co so thap phan
-
-	significant = "0." + significant; // chuan hoa de chuoi co dang 0.11111111111111111010100000000->0.111111111111111110101
-	StandardizedFractions(significant);
-	significant = significant.substr(2, significant.size()); //cat de chuoi co dang 111111111111111110101
-
 	string wholes;
-	string fraction;
-	if (exponentnumber <= 112 && exponentnumber > 0) //neu thoa dieu kien thi dich sang phai dau cham 1.F*2^E
+	string fraction = "0";
+
+	if (exponentnumber < 112 && exponentnumber > 0) //neu thoa dieu kien thi dich sang phai dau cham 1.F*2^E
 	{
 		wholes = '1' + significant.substr(0, exponentnumber);
-		fraction = significant.substr(exponentnumber, exponentnumber);
+		fraction = significant.substr(exponentnumber, significant.size());
 	}
 	else
-	{	
-		if (exponentnumber > 112)
+	{
+		if (exponentnumber >= 112) //so E > so bit luu phan significant
 		{
 			wholes = '1' + significant;
 		}
 		else
 		{
-			wholes = '0';
-			fraction = '1' + fraction;
-			for (int i = 1; i < exponentnumber; i++)
+			if (exponentnumber == 0) // truong hop 1.10101011010011
 			{
-				fraction = '0' + fraction;
+				wholes = '1';
+				fraction = significant;
+			}
+			else // truong hop 0.010011
+			{
+				wholes = '0';
+				exponentnumber = -exponentnumber;
+				fraction = '1' + significant;
+				for (int i = 1; i < exponentnumber; i++)
+				{
+					fraction = '0' + fraction;
+				}
 			}
 		}
 	}
+	// chuyen phan nguyen sang dec
 	if (sign[0] == '0')
 	{
 		wholes = WholesToDec(wholes);
@@ -178,15 +171,151 @@ string QFloat::BinToDec(string binQfloat)
 	{
 		wholes = '-' + WholesToDec(wholes);
 	}
-	
+	// chuyen phan thap phan sang dec
 	fraction = FractionsToDec(fraction);
+	//lam tron toi da toi 34 ki tu 34 = so chu so phan nguyen + so chu so phan thap phan
+
+	if (numofele)
+	{
+		while (fraction.size() < numofele)
+		{
+			fraction = fraction + '0';
+		}
+
+		bool flag = false; // phan nguyen co bi tang len hay khong
+		if (fraction[numofele] >= '5')
+		{
+			for (int i = numofele - 1; i >= 0; i--)
+			{
+				if (fraction[i] >= '0' && fraction[i] <= '9')
+				{
+					if (fraction[i] == '9') // cong so nguyen
+					{
+						if (i == 0)
+						{
+							flag = true;
+						}
+						fraction[i] = '0';
+					}
+					else
+					{
+						fraction[i] = char(fraction[i] + 1);
+						break;
+					}
+				}
+			}
+		}
+		if (flag)
+		{
+			bool flagtmp = false;
+			for (int i = wholes.size() - 1; i >= 0; i--)
+			{
+				if (wholes[i] >= '0' && wholes[i] <= '9')
+				{
+					if (wholes[i] == '9')
+					{
+						if (i == 0)
+						{
+							flagtmp = true;
+						}
+						wholes[i] = '0';
+					}
+					else
+					{
+						wholes[i] = char(wholes[i] + 1);
+						break;
+					}
+				}
+			}
+			if (flagtmp)
+			{
+				wholes = '1' + wholes;
+			}
+
+		}
+		fraction = fraction.substr(0, numofele);
+	}
+	else
+	{
+		numofele = 34 - wholes.size();
+		if (fraction.size() > numofele)
+		{
+			bool flag = false;
+			if (fraction[numofele] >= '5')
+			{
+				for (int i = numofele - 1; i >= 0; i--)
+				{
+					if (fraction[i] >= '0' && fraction[i] <= '9')
+					{
+						if (fraction[i] == '9')
+						{
+							if (i == 0)
+							{
+								flag = true;
+							}
+							fraction[i] = '0';
+						}
+						else
+						{
+							fraction[i] = char(fraction[i] + 1);
+							break;
+						}
+					}
+				}
+			}
+			if (flag)
+			{
+				bool flagtmp = false;
+				for (int i = wholes.size() - 1; i >= 0; i--)
+				{
+					if (wholes[i] >= '0' && wholes[i] <= '9')
+					{
+						if (wholes[i] == '9')
+						{
+							if (i == 0)
+							{
+								flagtmp = true;
+							}
+							wholes[i] = '0';
+						}
+						else
+						{
+							wholes[i] = char(wholes[i] + 1);
+							break;
+						}
+					}
+				}
+				if (flagtmp)
+				{
+					wholes = '1' + wholes;
+				}
+
+			}
+			fraction = fraction.substr(0, numofele);
+		}
+		for (int i = fraction.size() - 1; i >= 1; i--)
+		{
+			if (fraction[i] == '0')
+			{
+				fraction.pop_back();
+			}
+			if (fraction[i] == '.')
+			{
+				fraction.pop_back();
+				break;
+			}
+			if (fraction[i] >= '1' && fraction[i] <= '9')
+			{
+				break;
+			}
+		}
+	}
 
 	return wholes + '.' + fraction;
 }
 string QFloat::DecToBin(string decQfloat)
 {
 	string bit;
-	
 	if (decQfloat[0] == '-') // xu ly bit dấu
 	{
 		decQfloat = decQfloat.substr(1, decQfloat.size());
@@ -198,99 +327,184 @@ string QFloat::DecToBin(string decQfloat)
 	}
 
 	//chuan hoa string
-	StandardizedStringFloat(decQfloat);
+	StandardizedStringFloat(decQfloat);//0000125.25220000 -> 125.
 
 	//xu ly dectobin
 	//bien nhi phan
 	if (decQfloat.size() == 1 && decQfloat[0] == '0')
 	{
-		return "Zero"; // xác định trường hợp zero
+		string zero;
+		while (zero.size() < 128)
+		{
+			zero += '0';
+		}
+		return zero; // xác định trường hợp zero
 	}
-	
+
 	int point = decQfloat.find('.');
-	
+
 	string binQfloat;
-	if (point == -1)
+	if (point == -1)//123552
 	{
 		binQfloat += WholesToBin(decQfloat); // không tìm được dâu chấm tức có dạng 123456485
 	}
 	else
 	{
-		string wholes = decQfloat.substr(0,point); // tìm được thì tách làm 2 phần 123456.1234567 -> 123456 & 0.1234567
+		string wholes = decQfloat.substr(0, point); // tìm được thì tách làm 2 phần 123456.1234567 -> 123456 & 0.1234567
 		string fraction = '0' + decQfloat.substr(point, decQfloat.size());
 
 		string wholesbin = WholesToBin(wholes);
 		string fractionbin;
 		if (wholesbin.size() > 1 || wholesbin[0] != '0') //abc. || 1.
 		{
-			fractionbin = FractionsToBin(fraction, 112 - (wholesbin.size() - 1));
+			fractionbin = FractionsToBin(fraction, 113 - (wholesbin.size() - 1));
 		}
 		else//0.abc
 		{
 			int bit1 = FindBitInFractions(fraction);
 			if ((pow(2, 14) - 1) - bit1 <= 0)
 			{
-				return "Khong The Chuan Hoa!";
+				return "Denormalized";
 			}
-			fractionbin = FractionsToBin(fraction, 112 + FindBitInFractions(fraction));
+			fractionbin = FractionsToBin(fraction, 113 + bit1);//00000000000000000000000000000000001111101010
 		}
 
 		binQfloat = wholesbin + '.' + fractionbin;
 	}
 	// tim exponent nhi phan and significant
-	point = binQfloat.find('.');
+
+	point = binQfloat.find('.'); // 123123 -> 1010001010.010101
 	int exponent = 0;
 	string significant;
+
 	if (point == -1)
 	{
 		exponent = binQfloat.size() - 1 + pow(2, 14) - 1;
 		significant = binQfloat.substr(1, binQfloat.size());
-		while (significant.size() < 112)
-		{
-			significant += '0';
-		}
 	}
 	else
 	{
-		if (point > 1)
+		if (point > 1)//101101011.010101111001
 		{
-			
 			string wholes = binQfloat.substr(0, point);
 			string fraction = binQfloat.substr(point + 1, binQfloat.size());
+
 			exponent = wholes.size() - 1 + pow(2, 14) - 1;
 			significant = wholes.substr(1, wholes.size()) + fraction;
-			while (significant.size() < 112)
-			{
-				significant += '0';
-			}
-			significant = significant.substr(0, 112);
 		}
-		if (point == 1)
+		if (point == 1) //0.101010111111111 || 1.00000101011111
 		{
-
+			if (binQfloat[0] == '0')
+			{
+				for (int i = 2; i < binQfloat.size(); i++)
+				{
+					if (binQfloat[i] == '1')
+					{
+						exponent = -(i - 1) + pow(2, 14) - 1;
+						significant = binQfloat.substr(i + 1, binQfloat.size());
+						break;
+					}
+				}
+			}
+			else
+			{
+				exponent = pow(2, 14) - 1;
+				significant = binQfloat.substr(2, binQfloat.size());
+			}
 		}
 	}
+
+	while (significant.size() < 112)
+	{
+		significant += '0';
+	}
+	// Lam tron len
+	if (significant.size() > 112)
+	{
+		if (significant[112] == '1')
+		{
+			int find0 = significant.find('0');
+			if (find0 != -1)
+			{
+				for (int i = 111; i >= 0; i--)
+				{
+					if (significant[i] == '1')
+					{
+						significant[i] = '0';
+					}
+					else
+					{
+						significant[i] = '1';
+						break;
+					}
+				}
+			}
+			else
+			{
+				string tmp(112, '0');
+				significant = tmp;
+				exponent++;
+			}
+		}
+	}
+	//xac dinh cac truong hop loi
+	significant = significant.substr(0, 112);
+	if (exponent < 0)
+	{
+		exponent = 0;
+		return "Denormalized";
+	}
+
+	bool flag = false;
+	if (exponent >= 32767)
+	{
+		flag = true;
+	}
+	for (int i = 0; i < significant.size(); i++)
+	{
+		if (!flag)
+		{
+			break;
+		}
+		else
+		{
+			if (significant[i] == '1')
+			{
+				return "NaN - Not a Number";
+			}
+		}
+	}
+	if (flag)
+	{
+		return "Infinity";
+	}
+
+	string exp;
+	while (exponent > 0)
+	{
+		exp = char((exponent % 10) + 48) + exp;
+		exponent /= 10;
+	}
+
+	exp = WholesToBin(exp); // chuyen mu sang bin luu vao day bit
+
+	while (exp.size() < 15) // dam bao my co 15bit
+	{
+		exp = '0' + exp;
+	}
+
+	exp += significant;
+	bit += exp;
 	return bit;
 }
 
-/*void GetBit(int x, char bit[32])
+void ConvertBinStringtoFloat(string bin, int data[4]) // dua du lieu vao data
 {
-	for (int i = 0; i < 32; i++)
+	while (bin.size() < 128)
 	{
-		bit[i] = (x >> 31 - i) & 1;
+		bin += '0';
 	}
-}
-void SetBit(char bit[32], int& x)
-{
-	for (int i = 0; i < 32; i++)
-	{
-		x = x | (bit[i] << 31 - i);
-	}
-}*/
-void ConvertBinStringtoFloat(string bin, int data[4])
-{
 	string b(128, '0');
-
 	int k = 127;
 
 	for (int i = bin.size() - 1; i >= 0; i--)
@@ -314,45 +528,52 @@ void ConvertBinStringtoFloat(string bin, int data[4])
 
 	delete[] tmp;
 }
-string ConvertFloattoBinString(int data[4])
+string ConvertFloattoBinString(int data[4]) // lay du lieu tu data chuyen sang day bit
 {
-	string b(128,0);
-	char* tmp = new char[32];
-	int h = 0;
-
-	for (int i = 0; i < 4; i++)
+	string a;
+	if (IsZero(data) == 1)
 	{
-		GetBit(data[i], tmp);
-
-		for (int j = 0; j < 32; j++)
+		a += "0";
+	}
+	else
+	{
+		char* b = new char[128];
+		char* temp = new char[32];
+		int h = 0;
+		for (int i = 0; i < 4; i++)
 		{
-			b[h++] = tmp[j];
+			GetBit(data[i], temp);
+			for (int j = 0; j < 32; j++)
+			{
+				b[h++] = temp[j];
+			}
+		}
+		int slbit = 0;
+		int flag = 0;
+		for (int i = 0; i < 128; i++)
+		{
+			if (b[i] == 1)
+			{
+				flag = 1;
+				slbit = 128 - i;
+				break;
+			}
+		}
+		a.resize(slbit);
+		int c = 0;
+		for (int i = 128 - slbit; i < 128; i++)
+		{
+			a[c++] = b[i] + 48;
 		}
 	}
-
-	int slbit = 0;
-	int flag = 0;
-
-	for (int i = 0; i < 128; i++)
+	while (a.size() < 128)
 	{
-		if (b[i] == 1)
-		{
-			flag = 1;
-			slbit = 128 - i;
-			break;
-		}
+		a = '0' + a;
 	}
 
-	string a(slbit, '0');
-	int c = 0;
-	for (int i = 128 - slbit; i < 128; i++)
-	{
-		a[c++] = b[i] + 48;
-	}
 	return a;
 }
-
-string WholesToBin(string dec) // chuyen phan nguy sang nhi pahn
+string WholesToBin(string dec) // chuyen phan nguyen sang nhi phan
 {
 	for (int i = 0; i < dec.size(); i++)
 	{
@@ -401,7 +622,7 @@ string FractionsToBin(string frac, int numoffractions) // a.cdef frac co dang 0.
 	{
 		if (frac == "0.0" || frac == "1.0")
 		{
-			if(frac == "0.0")	bit += '0';
+			if (frac == "0.0")	bit += '0';
 			else
 			{
 				bit += '1';
@@ -413,7 +634,7 @@ string FractionsToBin(string frac, int numoffractions) // a.cdef frac co dang 0.
 		for (int i = frac.size() - 1; i >= 0; i--)
 		{
 			int mul2 = (int(frac[i]) - 48) * 2 + memo;
-			
+
 			if (frac[i] != '.')
 			{
 				if (mul2 >= 10)
@@ -466,7 +687,7 @@ void StandardizedStringFloat(string& decQfloat) // chuan hoa chuoi QFloat(dec) 0
 	int point = decQfloat.find('.');
 	if (point == -1)
 	{
-		StandardizedWholes(decQfloat); //Chỉ chuẩn hoá phần nguyên
+		StandardizedWholes(decQfloat);
 	}
 	else
 	{
@@ -525,6 +746,10 @@ int FindBitInFractions(string frac) // tim vi tri bit 1 trong chuoi thap phan bi
 	int vitri = 0;
 	while (true)
 	{
+		if (vitri > pow(2, 14) - 1)
+		{
+			break;
+		}
 		if (frac == "0.0" || frac == "1.0")
 		{
 			if (frac == "0.0")	break;
@@ -606,8 +831,6 @@ string WholesToDec(string bit) //phan nguyen tu nhi phan sang thap phan
 	}
 	return nDec;
 }
-
-
 string FractionsToDec(string bin) // hàm chuyển đổi phần thập phân dạng bin sang dec
 {
 	string dec = "0";
@@ -664,9 +887,4 @@ void FillZeroLast(string& num, int nbit)
 	{
 		num.insert(num.size(), "0");
 	}
-}
-int main()
-{
-	string a = FractionsToDec("0001100110011001100110011001100110011001100110011001100110011001100110011001100110011001100110011001100110011001101");
-	cout << a;
 }

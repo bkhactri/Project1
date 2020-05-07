@@ -1,16 +1,19 @@
 ﻿#include"UI.h"
 
+// dịch vị trí con trỏ
 void gotoxy(int column, int line)
 {
 	COORD coord = { column,line };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+// text color
 void setColor(int color)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
-//Hàm xoá con trỏ
+
+// ẩn con trỏ console
 void Nocursortype()
 {
 	CONSOLE_CURSOR_INFO Info;
@@ -18,24 +21,37 @@ void Nocursortype()
 	Info.dwSize = 20;
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &Info);
 }
-// Ham di chuyen
+
+// hàm di chuyển
 int Move()
 {
-	char c = _getch();
-	switch (int(c))
+	int flag = 1;
+	while (flag)
 	{
-	case 80:
-		return 1;			// Xuong
-	case 72:
-		return 2;			// Len
-	case 13:
-		return 3;			// Enter
-	default:
-		break;
+		char c = _getch();
+		if (int(c) == 80 || int(c) == 72 || int(c) == 13)
+		{
+			switch (int(c))
+			{
+			case 80:
+				return 1;			// Xuong
+			case 72:
+				return 2;			// Len
+			case 13:
+				return 3;			// Enter
+			default:
+				break;
+			}
+			flag = 0;
+		}
+		else
+		{
+			flag = 1;
+		}
 	}
 }
 
-// Tao khung
+// tạo khung lớn
 void BigFrame()
 {
 	// Khung lon
@@ -77,29 +93,16 @@ void BigFrame()
 	gotoxy(20, 5); cout << char(201); // cai moc cau ben trai tren
 	gotoxy(20, 27); cout << char(200); // moc cau ben trai duoi
 
-	gotoxy(24, 20);
-	cout << "Huong dan su dung:";
-
-	gotoxy(22, 22);
-	cout << "Mui ten xuong : Di xuong";
-
-	gotoxy(22, 23);
-	cout << "Mui ten len : Di len";
-
-	gotoxy(22, 24);
-	cout << "Enter : Chon";
-
-	gotoxy(49, 18);
-	cout << " BIN : ";
-
-	gotoxy(89, 18);
-	cout << " DEC : ";
-
-	gotoxy(128, 18);
-	cout << " HEX : ";
+	gotoxy(24, 20);	cout << "Huong dan su dung:";
+	gotoxy(22, 22);	cout << "Mui ten xuong : Di xuong";
+	gotoxy(22, 23);	cout << "Mui ten len : Di len";
+	gotoxy(22, 24);	cout << "Enter : Chon";
+	gotoxy(49, 18);	cout << " BIN : ";
+	gotoxy(89, 18);	cout << " DEC : ";
+	gotoxy(128, 18); cout << " HEX : ";
 }
 
-// 2 khung nho ben trong
+// tạo 2 khung nhỏ bên trong
 void Frame_1()
 {
 	gotoxy(55, 9);	cout << "Nhap so X :";
@@ -135,6 +138,7 @@ void Frame_1()
 	gotoxy(75, 14); cout << char(200); // moc cau ben trai duoi
 }
 
+// tạo 1 khung nhỏ bên trong
 void Frame_2()
 {
 	gotoxy(55, 11);	cout << "Nhap so X :";
@@ -151,74 +155,8 @@ void Frame_2()
 	gotoxy(75, 10); cout << char(201); // cai moc cau ben trai tren
 	gotoxy(75, 12); cout << char(200); // moc cau ben trai duoi
 }
-// xoa 2 khung nho ben trong
-//void deleteFrame_1()
-//{
-//	//clear input X Y
-//	for (int i = 77; i < 134; i++)
-//	{
-//		gotoxy(i, 9); cout << " ";
-//		gotoxy(i, 13); cout << " ";
-//	}
-//
-//	// clear frame
-//	gotoxy(55, 9);	cout << "                                       ";
-//	gotoxy(55, 13); cout << "                                       ";
-//	for (int i = 75; i < 135; i++) // tao dong ngang
-//	{
-//		gotoxy(i, 8); cout << " "; // dong ngang tren
-//		gotoxy(i, 10); cout << " ";  // dong ngang duoi
-//	}
-//
-//	gotoxy(75, 9); cout << " "; // dong thang ben trai
-//	gotoxy(135, 9); cout << " "; // dong thang ben phai
-//
-//	gotoxy(135, 8); cout << " "; // cai moc cau ben phai ben tre^n
-//	gotoxy(135, 10); cout << " "; // cai moc cau ben phai ben duoi
-//	gotoxy(75, 8); cout << " "; // cai moc cau ben trai tren
-//	gotoxy(75, 10); cout << " "; // moc cau ben trai duoi
-//
-//	// Khung duoi
-//	for (int i = 75; i < 135; i++) // tao dong ngang
-//	{
-//		gotoxy(i, 12); cout << " "; // dong ngang tren
-//		gotoxy(i, 14); cout << " ";  // dong ngang duoi
-//	}
-//
-//	gotoxy(75, 13); cout << " "; // dong thang ben trai
-//	gotoxy(135, 13); cout << " "; // dong thang ben phai
-//
-//	gotoxy(135, 12); cout << " "; // cai moc cau ben phai ben tre^n
-//	gotoxy(135, 14); cout << " "; // cai moc cau ben phai ben duoi
-//	gotoxy(75, 12); cout << " "; // cai moc cau ben trai tren
-//	gotoxy(75, 14); cout << " "; // moc cau ben trai duoi
-//}
 
-//void deleteFrame_2()
-//{
-//	for (int i = 55; i < 134; i++)
-//	{
-//		gotoxy(i, 11); cout << " ";
-//	}
-//	// clear frame
-//	gotoxy(55, 10);	cout << "                                       ";
-//	gotoxy(55, 12); cout << "                                       ";
-//	for (int i = 75; i < 135; i++) // tao dong ngang
-//	{
-//		gotoxy(i, 10); cout << " "; // dong ngang tren
-//		gotoxy(i, 12); cout << " ";  // dong ngang duoi
-//	}
-//
-//	gotoxy(75, 11); cout << " "; // dong thang ben trai
-//	gotoxy(135, 11); cout << " "; // dong thang ben phai
-//
-//	gotoxy(135, 10); cout << " "; // cai moc cau ben phai ben tre^n
-//	gotoxy(135, 12); cout << " "; // cai moc cau ben phai ben duoi
-//	gotoxy(75, 10); cout << " "; // cai moc cau ben trai tren
-//	gotoxy(75, 12); cout << " "; // moc cau ben trai duoi
-//}
-// xoa day bin dec hex
-
+// xóa vị trí nhập vào
 void deleteInput()
 {
 	for (int i = 7; i <= 14; i++)
@@ -230,6 +168,7 @@ void deleteInput()
 	}
 }
 
+// xóa vị trí xuất ra 
 void deleteOutPut()
 {
 	// clear Bin
@@ -263,6 +202,7 @@ void deleteOutPut()
 	}
 }
 
+// xóa menu
 void deleteMenu()
 {
 
@@ -276,7 +216,7 @@ void deleteMenu()
 	}
 }
 
-// xuat day bin dec hex
+// xuất kết quả
 void OutPut(string s, string q, string p)
 {
 	if (s.size() != 0)
@@ -356,12 +296,95 @@ void OutPut(string s, string q, string p)
 	}
 }
 
-//void OutPutInvalid(string nbit1,string nbit2)
-//{
-//	if (nbit1.size() > 128 || nbit2.size() > 128)
-//	{
-//		gotoxy(50, 20); cout << "Invalid";
-//		gotoxy(91, 20); cout << "Invalid";
-//		gotoxy(130, 20); cout << "Invalid";
-//	}
-//}
+// kiểm tra enter, esc
+void checkEnter()
+{
+	int flag = 1;
+	while (flag)
+	{
+		char c = _getch();
+		if (int(c) == 13 || int(c) == 27)
+		{
+			flag = 0;
+			deleteInput();
+			deleteOutPut();
+		}
+		else flag = 1;
+	}
+}
+
+// kiểm tra nhập thập phân
+int checkDec(string s)
+{
+	int flag = 1;
+	if (s.size() == 1 && s == "-")
+	{
+		return 0;
+	}
+	for (int i = 1; i < s.size(); i++)
+	{
+		if (s[i] >= '0' && s[i] <= '9' && (s[0] = '-' || (s[0] >= '0' && s[0] <= '9')))
+		{
+			flag = 1;
+		}
+		else {
+			flag = 0;
+			break;
+		}
+	}
+	return flag;
+}
+
+// kiểm tra nhập nhị phân
+int checkBin(string s)
+{
+	int flag = 1;
+	for (int i = 0; i < s.size(); i++)
+	{
+		if (s[i] == '0' || s[i] == '1')
+		{
+			flag = 1;
+		}
+		else {
+			flag = 0;
+			break;
+		}
+	}
+	return flag;
+}
+
+// kiểm tra nhập thập lục phân
+int checkHex(string s)
+{
+	int flag = 1;
+	for (int i = 0; i < s.size(); i++)
+	{
+		if ((s[i] >= 'a' && s[i] <= 'f' || (s[i] >= '0' && s[i] <= '9')) || (s[i] >= 'A' && s[i] <= 'F') || (s[i] >= '0' && s[i] <= '9'))
+		{
+			flag = 1;
+		}
+		else {
+			flag = 0;
+			break;
+		}
+	}
+	return flag;
+}
+
+// kiểm tra chia
+int checkDiv(string s)
+{
+	int flag = 1;
+	for (int i = 0; i < s.size(); i++)
+	{
+		if (s[i] == '0')
+		{
+			flag = 1;
+		}
+		else {
+			flag = 0;
+			break;
+		}
+	}
+	return flag;
+}

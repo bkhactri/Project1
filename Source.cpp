@@ -1,17 +1,19 @@
-#include"QInt.h"
+﻿#include"QInt.h"
 #include"UI.h"
 #include"QFloat.h"
 
-#define NumberOfItem 5
-string item[NumberOfItem] = { "QInt 'DEC'","QInt 'BIN'","QInt 'HEX'","INPUT 'FILE'","EXIT" };
-
+#define NumberOfItem 6
+string item[NumberOfItem] = { "QInt 'DEC'","QInt 'BIN'","QInt 'HEX'","QFloat 'DEC' 'BIN'","INPUT 'FILE'","EXIT" };
 #define NumberOfItem1 10
 string item1[NumberOfItem1] = { "Convert QInt 'DEC'","+ 'DEC'","- 'DEC'","* 'DEC'","/ 'DEC'","&(and) 'DEC'","|(or) 'DEC'","^(xor) 'DEC'","~(not) 'DEC'","BACK" };
 #define NumberOfItem2 10
 string item2[NumberOfItem2] = { "Convert QInt 'BIN'","+ 'BIN'","- 'BIN'","* 'BIN'","/ 'BIN'","&(and) 'BIN'","|(or) 'BIN'","^(xor) 'BIN'","~(not) 'BIN'","BACK" };
 #define NumberOfItem3 10
 string item3[NumberOfItem3] = { "Convert QInt 'HEX'","+ 'HEX'","- 'HEX'","* 'HEX'","/ 'HEX'","&(and) 'HEX'","|(or) 'HEX'","^(xor) 'HEX'","~(not) 'HEX'","BACK" };
+#define NumberOfItem4 3
+string item4[NumberOfItem4] = { "Convert QFloat 'DEC'","Convert QFloat 'BIN'","BACK" };
 
+// chuyển đổi thập phân sang nhi phân, thập lục phân
 void QInt_Dec()			//QInt Dec to ...
 {
 	gotoxy(80, 7);
@@ -23,7 +25,7 @@ void QInt_Dec()			//QInt Dec to ...
 	gotoxy(77, 11);
 	cin >> input;
 	string nbit = a.DecToBin(input);
-	if (nbit.size() > 128)
+	if (nbit.size() > 128 || checkDec(input) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -38,7 +40,7 @@ void QInt_Dec()			//QInt Dec to ...
 		OutPut(s, q, p);
 	}
 }
-
+// chuyển đổi  nhi phân sang thập phân, thập lục phân
 void QInt_Bin()			//QInt  Bin to ...
 {
 	gotoxy(80, 7);
@@ -49,7 +51,7 @@ void QInt_Bin()			//QInt  Bin to ...
 	QInt a;
 	gotoxy(77, 11);
 	cin >> input;
-	if (input.size() > 128)
+	if (input.size() > 128 || checkBin(input) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -64,7 +66,7 @@ void QInt_Bin()			//QInt  Bin to ...
 		OutPut(s, q, p);
 	}
 }
-
+// chuyển đổi thập lục phân sang nhi phân, thập phân
 void QInt_Hex()			//QInt  Hex to ...
 {
 	gotoxy(80, 7);
@@ -76,7 +78,7 @@ void QInt_Hex()			//QInt  Hex to ...
 	gotoxy(77, 11);
 	cin >> input;
 	string nbit = a.HexToBin(input);
-	if (nbit.size() > 128)
+	if (nbit.size() > 128 || checkHex(input) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -91,32 +93,7 @@ void QInt_Hex()			//QInt  Hex to ...
 		OutPut(s, q, p);
 	}
 }
-
-/*void QFloat_Dec()		//QFloat Dec to ...
-{
-	gotoxy(80, 7);
-	cout << "*** Input 'QFloat DEC' ***";
-	// To do here
-
-	string input, s, q = "", p = "";
-	QFloat a;
-	gotoxy(77, 11);
-	cin >> input;
-	a.ScanQFloat(input);
-
-	s = a.Print_QFloat();
-	OutPut(s, q, p);
-}*/
-
-//void QFloat_Bin()			//QFloat Bin to ...
-//{
-//	gotoxy(80, 7);
-//	cout << "*** Input 'QFloat BIN' ***";
-//
-//	// To do here
-//
-//}
-
+// cộng thập phân
 void Plus_Dec() // + Dec
 {
 	gotoxy(80, 7);
@@ -131,7 +108,7 @@ void Plus_Dec() // + Dec
 	cin >> y;
 	string nbit1 = a.DecToBin(x);
 	string nbit2 = b.DecToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -148,7 +125,7 @@ void Plus_Dec() // + Dec
 		OutPut(s, q, p);
 	}
 }
-
+// cộng nhị phân
 void Plus_Bin()  // + Bin
 {
 	gotoxy(80, 7);
@@ -162,7 +139,7 @@ void Plus_Bin()  // + Bin
 	gotoxy(77, 13);
 	cin >> y;
 
-	if (x.size() > 128 || y.size() > 128)
+	if (x.size() > 128 || y.size() > 128 || checkBin(x) == 0 || checkBin(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -180,7 +157,7 @@ void Plus_Bin()  // + Bin
 		OutPut(s, q, p);
 	}
 }
-
+// cộng thập lục phân
 void Plus_Hex() // + Hex
 {
 	gotoxy(80, 7);
@@ -196,7 +173,7 @@ void Plus_Hex() // + Hex
 
 	string nbit1 = a.HexToBin(x);
 	string nbit2 = b.HexToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkHex(x) == 0 || checkHex(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -213,7 +190,7 @@ void Plus_Hex() // + Hex
 		OutPut(s, q, p);
 	}
 }
-
+// trừ thập phân
 void Minus_Dec() // - Dec
 {
 	gotoxy(80, 7);
@@ -229,7 +206,7 @@ void Minus_Dec() // - Dec
 
 	string nbit1 = a.DecToBin(x);
 	string nbit2 = b.DecToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -246,7 +223,7 @@ void Minus_Dec() // - Dec
 		OutPut(s, q, p);
 	}
 }
-
+// trừ nhị phân
 void Minus_Bin() // - Bin
 {
 	gotoxy(80, 7);
@@ -260,7 +237,7 @@ void Minus_Bin() // - Bin
 	gotoxy(77, 13);
 	cin >> y;
 
-	if (x.size() > 128 || y.size() > 128)
+	if (x.size() > 128 || y.size() > 128 || checkBin(x) == 0 || checkBin(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -278,7 +255,7 @@ void Minus_Bin() // - Bin
 		OutPut(s, q, p);
 	}
 }
-
+// trừ thập lục phân
 void Minus_Hex() // - Hex
 {
 	gotoxy(80, 7);
@@ -294,7 +271,7 @@ void Minus_Hex() // - Hex
 
 	string nbit1 = a.HexToBin(x);
 	string nbit2 = b.HexToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkHex(x) == 0 || checkHex(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -311,7 +288,7 @@ void Minus_Hex() // - Hex
 		OutPut(s, q, p);
 	}
 }
-
+// nhân thập phân
 void Mul_Dec() // * Dec
 {
 	gotoxy(80, 7);
@@ -327,7 +304,7 @@ void Mul_Dec() // * Dec
 
 	string nbit1 = a.DecToBin(x);
 	string nbit2 = b.DecToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -344,7 +321,7 @@ void Mul_Dec() // * Dec
 		OutPut(s, q, p);
 	}
 }
-
+// nhân nhị phân
 void Mul_Bin() // * Bin
 {
 	gotoxy(80, 7);
@@ -358,7 +335,7 @@ void Mul_Bin() // * Bin
 	gotoxy(77, 13);
 	cin >> y;
 
-	if (x.size() > 128 || y.size() > 128)
+	if (x.size() > 128 || y.size() > 128 || checkBin(x) == 0 || checkBin(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -376,7 +353,7 @@ void Mul_Bin() // * Bin
 		OutPut(s, q, p);
 	}
 }
-
+// nhân thập lục phân
 void Mul_Hex() // * Hex
 {
 	gotoxy(80, 7);
@@ -392,7 +369,7 @@ void Mul_Hex() // * Hex
 
 	string nbit1 = a.HexToBin(x);
 	string nbit2 = b.HexToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkHex(x) == 0 || checkHex(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -409,7 +386,7 @@ void Mul_Hex() // * Hex
 		OutPut(s, q, p);
 	}
 }
-
+// chia thập phân
 void Div_Dec() // / Dec
 {
 	gotoxy(80, 7);
@@ -425,7 +402,7 @@ void Div_Dec() // / Dec
 
 	string nbit1 = a.DecToBin(x);
 	string nbit2 = b.DecToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0 || checkDiv(nbit2) == 1)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -442,7 +419,7 @@ void Div_Dec() // / Dec
 		OutPut(s, q, p);
 	}
 }
-
+// chia nhị phân
 void Div_Bin() // / Bin
 {
 	gotoxy(80, 7);
@@ -455,8 +432,7 @@ void Div_Bin() // / Bin
 	cin >> x;
 	gotoxy(77, 13);
 	cin >> y;
-
-	if (x.size() > 128 || y.size() > 128)
+	if (x.size() > 128 || y.size() > 128 || checkBin(x) == 0 || checkBin(y) == 0 || checkDiv(y) == 1)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -474,7 +450,7 @@ void Div_Bin() // / Bin
 		OutPut(s, q, p);
 	}
 }
-
+// chia thập lục phân
 void Div_Hex() // / Hex
 {
 	gotoxy(80, 7);
@@ -491,7 +467,7 @@ void Div_Hex() // / Hex
 	string l = a.HexToBin(x);
 	string k = a.HexToBin(y);
 
-	if (l.size() > 128 || k.size() > 128)
+	if (l.size() > 128 || k.size() > 128 || checkHex(l) == 0 || checkHex(k) == 0 || checkDiv(k) == 1)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -508,7 +484,7 @@ void Div_Hex() // / Hex
 		OutPut(s, q, p);
 	}
 }
-
+// and dec QInt
 void And_Dec()
 {
 	gotoxy(80, 7);
@@ -524,7 +500,7 @@ void And_Dec()
 
 	string nbit1 = a.DecToBin(x);
 	string nbit2 = b.DecToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -541,7 +517,7 @@ void And_Dec()
 		OutPut(s, q, p);
 	}
 }
-
+// or dec QInt
 void Or_Dec()
 {
 	gotoxy(80, 7);
@@ -557,7 +533,7 @@ void Or_Dec()
 
 	string nbit1 = a.DecToBin(x);
 	string nbit2 = b.DecToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -574,7 +550,7 @@ void Or_Dec()
 		OutPut(s, q, p);
 	}
 }
-
+// xor dec QInt
 void Xor_Dec()
 {
 	gotoxy(80, 7);
@@ -590,7 +566,7 @@ void Xor_Dec()
 
 	string nbit1 = a.DecToBin(x);
 	string nbit2 = b.DecToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -607,7 +583,7 @@ void Xor_Dec()
 		OutPut(s, q, p);
 	}
 }
-
+// not bin QInt
 void Not_Dec()
 {
 	gotoxy(80, 7);
@@ -619,7 +595,7 @@ void Not_Dec()
 	gotoxy(77, 11);
 	cin >> input;
 	string nbit = a.DecToBin(input);
-	if (nbit.size() > 128)
+	if (nbit.size() > 128 || checkDec(input) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -635,7 +611,7 @@ void Not_Dec()
 		OutPut(s, q, p);
 	}
 }
-
+// and bin QInt
 void And_Bin()
 {
 	gotoxy(80, 7);
@@ -649,7 +625,7 @@ void And_Bin()
 	gotoxy(77, 13);
 	cin >> y;
 
-	if (x.size() > 128 || y.size() > 128)
+	if (x.size() > 128 || y.size() > 128 || checkBin(x) == 0 || checkBin(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -667,7 +643,7 @@ void And_Bin()
 		OutPut(s, q, p);
 	}
 }
-
+// or bin QInt
 void Or_Bin()
 {
 	gotoxy(80, 7);
@@ -681,7 +657,7 @@ void Or_Bin()
 	gotoxy(77, 13);
 	cin >> y;
 
-	if (x.size() > 128 || y.size() > 128)
+	if (x.size() > 128 || y.size() > 128 || checkBin(x) == 0 || checkBin(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -699,7 +675,7 @@ void Or_Bin()
 		OutPut(s, q, p);
 	}
 }
-
+// xor bin QInt
 void Xor_Bin()
 {
 	gotoxy(80, 7);
@@ -713,7 +689,7 @@ void Xor_Bin()
 	gotoxy(77, 13);
 	cin >> y;
 
-	if (x.size() > 128 || y.size() > 128)
+	if (x.size() > 128 || y.size() > 128 || checkBin(x) == 0 || checkBin(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -731,7 +707,7 @@ void Xor_Bin()
 		OutPut(s, q, p);
 	}
 }
-
+// not bin QInt
 void Not_Bin()
 {
 	gotoxy(80, 7);
@@ -742,7 +718,7 @@ void Not_Bin()
 	QInt a, b;
 	gotoxy(77, 11);
 	cin >> input;
-	if (input.size() > 128)
+	if (input.size() > 128 || checkBin(input) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -758,7 +734,7 @@ void Not_Bin()
 		OutPut(s, q, p);
 	}
 }
-
+// and bin QInt
 void And_Hex()
 {
 	gotoxy(80, 7);
@@ -774,7 +750,7 @@ void And_Hex()
 
 	string nbit1 = a.HexToBin(x);
 	string nbit2 = b.HexToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkHex(x) == 0 || checkHex(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -791,7 +767,7 @@ void And_Hex()
 		OutPut(s, q, p);
 	}
 }
-
+// or hex QInt
 void Or_Hex()
 {
 	gotoxy(80, 7);
@@ -807,7 +783,7 @@ void Or_Hex()
 
 	string nbit1 = a.HexToBin(x);
 	string nbit2 = b.HexToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkHex(x) == 0 || checkHex(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -824,7 +800,7 @@ void Or_Hex()
 		OutPut(s, q, p);
 	}
 }
-
+// xor hex QInt
 void Xor_Hex()
 {
 	gotoxy(80, 7);
@@ -840,7 +816,7 @@ void Xor_Hex()
 
 	string nbit1 = a.HexToBin(x);
 	string nbit2 = b.HexToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128)
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkHex(x) == 0 || checkHex(y) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -857,7 +833,7 @@ void Xor_Hex()
 		OutPut(s, q, p);
 	}
 }
-
+// not hex QInt
 void Not_Hex()
 {
 	gotoxy(80, 7);
@@ -869,7 +845,7 @@ void Not_Hex()
 	gotoxy(77, 11);
 	cin >> input;
 	string nbit = a.HexToBin(input);
-	if (nbit.size() > 128)
+	if (nbit.size() > 128 || checkHex(input) == 0)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -886,7 +862,29 @@ void Not_Hex()
 	}
 }
 
-void inputFile()		// File 
+// chuyển đổi thập phân sang nhị phân (QFloat)
+void QFloat_Dec()
+{
+	gotoxy(80, 7);
+	cout << "*** Input 'QFloat DEC' ***";
+	// To do here
+	string input, s, q = "", p = "";
+	QFloat a;
+	gotoxy(77, 11);
+
+}
+// chuyển đổi nhị phân sang thập phân (QFloat)
+void QFloat_Bin()
+{
+	gotoxy(80, 7);
+	cout << "*** Input 'QFloat BIN' ***";
+
+	// To do here
+
+}
+
+//file
+void inputFile()
 {
 	gotoxy(80, 7);
 	cout << "***     Input 'FILE'   ***";
@@ -894,8 +892,8 @@ void inputFile()		// File
 	// To do here
 
 }
-
-void Exit()				// Thoat
+// thoát
+void Exit()
 {
 	system("cls");
 	while (1)
@@ -916,10 +914,10 @@ void Exit()				// Thoat
 	}
 }
 
-// menu nho
-void menuQIntDec()
+// menu nhỏ Dec QInt
+void menuQIntDec(int li)
 {
-	deleteMenu();		// delete menu truoc
+	deleteMenu();
 
 	bool exit = true;
 	int line = 7;
@@ -979,54 +977,63 @@ void menuQIntDec()
 				{
 					Frame_2();
 					QInt_Dec();
+					checkEnter();
 					break;
 				}
 				case 8:
 				{
 					Frame_1();
 					Plus_Dec();
+					checkEnter();
 					break;
 				}
 				case 9:
 				{
 					Frame_1();
 					Minus_Dec();
+					checkEnter();
 					break;
 				}
 				case 10:
 				{
 					Frame_1();
 					Mul_Dec();
+					checkEnter();
 					break;
 				}
 				case 11:
 				{
 					Frame_1();
 					Div_Dec();
+					checkEnter();
 					break;
 				}
 				case 12:
 				{
 					Frame_1();
 					And_Dec();
+					checkEnter();
 					break;
 				}
 				case 13:
 				{
 					Frame_1();
 					Or_Dec();
+					checkEnter();
 					break;
 				}
 				case 14:
 				{
 					Frame_1();
 					Xor_Dec();
+					checkEnter();
 					break;
 				}
 				case 15:
 				{
 					Frame_2();
 					Not_Dec();
+					checkEnter();
 					break;
 				}
 				case 16:
@@ -1049,13 +1056,19 @@ void menuQIntDec()
 			default:
 				break;
 			}
+			gotoxy(23, line);
+			cout << char(175);
 		}
 	}
+	gotoxy(23, li);
+	cout << char(175);
+	gotoxy(23, 16);
+	cout << " ";
 }
-
-void menuQIntBin()
+// menu nhỏ Bin QInt
+void menuQIntBin(int li)
 {
-	deleteMenu();		// delete menu truoc
+	deleteMenu();
 
 	bool exit = true;
 	int line = 7;
@@ -1114,54 +1127,63 @@ void menuQIntBin()
 				{
 					Frame_2();
 					QInt_Bin();
+					checkEnter();
 					break;
 				}
 				case 8:
 				{
 					Frame_1();
 					Plus_Bin();
+					checkEnter();
 					break;
 				}
 				case 9:
 				{
 					Frame_1();
 					Minus_Bin();
+					checkEnter();
 					break;
 				}
 				case 10:
 				{
 					Frame_1();
 					Mul_Bin();
+					checkEnter();
 					break;
 				}
 				case 11:
 				{
 					Frame_1();
 					Div_Bin();
+					checkEnter();
 					break;
 				}
 				case 12:
 				{
 					Frame_1();
 					And_Bin();
+					checkEnter();
 					break;
 				}
 				case 13:
 				{
 					Frame_1();
 					Or_Bin();
+					checkEnter();
 					break;
 				}
 				case 14:
 				{
 					Frame_1();
 					Xor_Bin();
+					checkEnter();
 					break;
 				}
 				case 15:
 				{
 					Frame_2();
 					Not_Bin();
+					checkEnter();
 					break;
 				}
 				case 16:
@@ -1184,13 +1206,19 @@ void menuQIntBin()
 			default:
 				break;
 			}
+			gotoxy(23, line);
+			cout << char(175);
 		}
 	}
+	gotoxy(23, li);
+	cout << char(175);
+	gotoxy(23, 16);
+	cout << " ";
 }
-
-void menuQIntHex()
+// menu nhỏ Hex QInt
+void menuQIntHex(int li)
 {
-	deleteMenu();		// delete menu truoc
+	deleteMenu();
 
 	bool exit = true;
 	int line = 7;
@@ -1249,54 +1277,63 @@ void menuQIntHex()
 				{
 					Frame_2();
 					QInt_Hex();
+					checkEnter();
 					break;
 				}
 				case 8:
 				{
 					Frame_1();
 					Plus_Hex();
+					checkEnter();
 					break;
 				}
 				case 9:
 				{
 					Frame_1();
 					Minus_Hex();
+					checkEnter();
 					break;
 				}
 				case 10:
 				{
 					Frame_1();
 					Mul_Hex();
+					checkEnter();
 					break;
 				}
 				case 11:
 				{
 					Frame_1();
 					Div_Hex();
+					checkEnter();
 					break;
 				}
 				case 12:
 				{
 					Frame_1();
 					And_Hex();
+					checkEnter();
 					break;
 				}
 				case 13:
 				{
 					Frame_1();
 					Or_Hex();
+					checkEnter();
 					break;
 				}
 				case 14:
 				{
 					Frame_1();
 					Xor_Hex();
+					checkEnter();
 					break;
 				}
 				case 15:
 				{
 					Frame_2();
 					Not_Hex();
+					checkEnter();
 					break;
 				}
 				case 16:
@@ -1319,11 +1356,118 @@ void menuQIntHex()
 			default:
 				break;
 			}
+			gotoxy(23, line);
+			cout << char(175);
 		}
 	}
+	gotoxy(23, li);
+	cout << char(175);
+	gotoxy(23, 16);
+	cout << " ";
+}
+// menu nhỏ QFloat
+void menuQFLoat(int li)
+{
+	deleteMenu();
+
+	bool exit = true;
+	int line = 7;
+
+	for (int i = 0; i < NumberOfItem3; i++)
+	{
+		gotoxy(25, line + i);
+		cout << item4[i];
+		Sleep(50);
+	}
+	gotoxy(23, line);				// Tro menu
+	cout << char(175);
+
+	int move;
+	while (exit == true)
+	{
+
+		if (_kbhit())
+		{
+			move = Move();
+			gotoxy(23, line);
+			cout << " ";
+
+			deleteInput();
+			deleteOutPut();
+
+			switch (move)
+			{
+			case 1:
+			{
+				line++;
+				if (line >= NumberOfItem4 + 7)
+				{
+					line = 7;
+				}
+				gotoxy(23, line);
+				cout << char(175);
+				break;
+			}
+			case 2:
+			{
+				line--;
+				if (line < 7)
+				{
+					line = NumberOfItem4 - 1 + 7;
+				}
+				gotoxy(23, line);
+				cout << char(175);
+				break;
+			}
+			case 3:
+			{
+				switch (line)
+				{
+				case 7:
+				{
+					Frame_2();
+					QFloat_Dec();
+					checkEnter();
+					break;
+				}
+				case 8:
+				{
+					Frame_2();
+					QFloat_Bin();
+					checkEnter();
+					break;
+				}
+				case 9:
+				{
+					deleteMenu();
+					for (int i = 0; i < NumberOfItem; i++)
+					{
+						gotoxy(25, i + 7);
+						cout << item[i];
+						Sleep(50);
+					}
+					exit = false;
+					break;
+				}
+				default:
+					break;
+				}
+				break;
+			}
+			default:
+				break;
+			}
+			gotoxy(23, line);
+			cout << char(175);
+		}
+	}
+	gotoxy(23, li);
+	cout << char(175);
+	gotoxy(23, 9);
+	cout << " ";
 }
 
-/*int main()
+int main()
 {
 	::SendMessage(::GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
 	setColor(11);
@@ -1383,32 +1527,33 @@ void menuQIntHex()
 				{
 				case 7:
 				{
-					menuQIntDec();
+					menuQIntDec(line);
 					break;
 				}
 				case 8:
 				{
-					menuQIntBin();
+					menuQIntBin(line);
 					break;
 				}
 				case 9:
 				{
-					menuQIntHex();
+					menuQIntHex(line);
 					break;
 				}
-				/*case 23:
+				case 10:
 				{
-					Frame_2();
-					QFloat_Bin();
-					break;
-				*/
-				/*case 10:
-				{
-					Frame_2();
-					inputFile();
+					menuQFLoat(line);
 					break;
 				}
 				case 11:
+				{
+					Frame_2();
+					inputFile();
+					checkEnter();
+					gotoxy(23, 11); cout << char(175);
+					break;
+				}
+				case 12:
 				{
 					Exit();
 					exit = false;
@@ -1424,4 +1569,4 @@ void menuQIntHex()
 		}
 	}
 	return 0;
-}*/
+}
