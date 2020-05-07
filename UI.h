@@ -6,6 +6,7 @@
 #include<conio.h>
 using namespace std;
 
+void Nocursortype();
 void gotoxy(int column, int line);
 void setColor(int color);
 int Move();

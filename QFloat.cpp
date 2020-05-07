@@ -1,4 +1,5 @@
 ﻿#include "QFloat.h"
+#include"QInt.h"
 
 QFloat::QFloat(string FloatStringdata, int He)
 {	if (He == 2)
@@ -607,22 +608,65 @@ string WholesToDec(string bit) //phan nguyen tu nhi phan sang thap phan
 }
 
 
-string FractionsToDec(string bin) // ham chuyen thap phan sang dec bin dang 0000001010111101 của phần thập phân
+string FractionsToDec(string bin) // hàm chuyển đổi phần thập phân dạng bin sang dec
 {
-	
-	return bin;
-}
-string PowNegative2(int repeat)
-{
-	string res = "1";
-	double temp = 0;
-	for (int i = 0; i < repeat; i++)
+	string dec = "0";
+	for (int i = 0; i < bin.size(); i++)
 	{
-		for (int j = res.size() - 1; j >= 0; j--)
+		if (bin[i] == '1')
 		{
-			temp = (res[j] - '0') / 2;
-			
+			string temp = PowNegative(i + 1);
+			if (dec.size() > temp.size())
+			{
+				FillZeroLast(temp, dec.size());
+			}
+			else
+			{
+				FillZeroLast(dec, temp.size());
+			}
+			dec = PlusDec(dec, temp);
 		}
 	}
+	return dec;
+}
+string PowNegative(int repeat)
+{
+	string res = "1";
+	int temp = 0;
+	int carry = 0;
+	for (int i = 0; i < repeat; i++)
+	{
+		string multi_temp = "";
+		for (int j = res.size() - 1; j >= 0; j--)
+		{
+			temp = (res[j] - '0') * 5 + carry;
+			multi_temp = char(temp % 10 + '0') + multi_temp;
+			carry = temp / 10;
+		}
+		if (carry != 0)
+		{
+			multi_temp = char(carry + '0') + multi_temp;
+			carry = 0;
+		}
+		res = multi_temp;
+
+	}
+	if (res.size() < repeat)
+	{
+		FillZero(res, repeat);
+	}
 	return res;
+}
+//Hàm thêm 0 vào đầu dãy đến khi nào input.size % nbit == 0 (num là 1 chuỗi nhị phân)
+void FillZeroLast(string& num, int nbit)
+{
+	while (num.size() % nbit != 0)
+	{
+		num.insert(num.size(), "0");
+	}
+}
+int main()
+{
+	string a = FractionsToDec("0001100110011001100110011001100110011001100110011001100110011001100110011001100110011001100110011001100110011001101");
+	cout << a;
 }

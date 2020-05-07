@@ -1,4 +1,4 @@
-#include"UI.h"
+﻿#include"UI.h"
 
 void gotoxy(int column, int line)
 {
@@ -10,7 +10,14 @@ void setColor(int color)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
-
+//Hàm xoá con trỏ
+void Nocursortype()
+{
+	CONSOLE_CURSOR_INFO Info;
+	Info.bVisible = FALSE;
+	Info.dwSize = 20;
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &Info);
+}
 // Ham di chuyen
 int Move()
 {

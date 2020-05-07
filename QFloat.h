@@ -41,4 +41,5 @@
 	int FindBitInFractions(string fractions);
 	string WholesToDec(string bin);
 	string FractionsToDec(string bin);
-	string PowNegative2(int repeat);
+	string PowNegative(int repeat);
+	void FillZeroLast(string& num, int nbit);

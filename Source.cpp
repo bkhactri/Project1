@@ -1323,10 +1323,11 @@ void menuQIntHex()
 	}
 }
 
-int main()
+/*int main()
 {
 	::SendMessage(::GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
 	setColor(11);
+	Nocursortype();
 
 	bool exit = true;
 	int line = 7;					// Vi tri dong menu
@@ -1406,7 +1407,7 @@ int main()
 					Frame_2();
 					inputFile();
 					break;
-				}*/
+				}
 				case 11:
 				{
 					Exit();
@@ -1423,4 +1424,4 @@ int main()
 		}
 	}
 	return 0;
-}
+}*/
