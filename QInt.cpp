@@ -504,7 +504,7 @@ QInt QInt::operator+(const QInt& num)
 	QInt res;
 	string a = ConvertInt4toString(this->data); //chuỗi nhị phân a
 	string b = ConvertInt4toString(num.data); //chuỗi nhị phân b
-	string temp = PlusBit(a, b, 0); //chuỗi nhị phân a+b
+	string temp = PlusBit(a, b); //chuỗi nhị phân a+b
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
@@ -516,7 +516,7 @@ QInt QInt::operator-(const QInt& num)
 	string a = ConvertInt4toString(this->data); //chuỗi nhị phân a
 	string b = ConvertInt4toString(num.data); //chuỗi nhị phân b 
 	b = ConvertToOffetTwo(b); //b -> -b (nếu b âm thì -b->b)
-	string temp = PlusBit(a, b, 0);//a - b (nếu b âm thì a + --b)
+	string temp = PlusBit(a, b);//a - b (nếu b âm thì a + --b)
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
@@ -851,11 +851,11 @@ string ConvertToOffetTwo(string num)
 		else if (num[i] == '1') temp += '0';
 	}
 	//Đến đây đã có dãy bit bù 1
-	temp = PlusBit(temp, "1", 0); // + 1 vào dãy bit bù 1 để có dãy bit bù 2
+	temp = PlusBit(temp, "1"); // + 1 vào dãy bit bù 1 để có dãy bit bù 2
 	return temp;
 }
 //Hàm cộng 2 chuỗi nhị phân num1 và num2 , handles cho phép cộng tràn
-string PlusBit(string num1, string num2,bool handles)//num1 + num2
+string PlusBit(string num1, string num2)//num1 + num2
 {
 	int carry = 0; // biến nhớ phần bit thừa mặc định là 0
 	if (num1.size() > num2.size()) //Giúp 2 thg có kích thước bằng nhau
@@ -886,10 +886,6 @@ string PlusBit(string num1, string num2,bool handles)//num1 + num2
 			carry = 0;
 		}
 	}
-	if (carry != 0 && handles == 1) //tràn
-	{
-		res = char(carry + '0') + res;
-	}
 	return res;
 }
 //Hàm nhân 2 chuỗi nhị phân num1 và num2
@@ -916,7 +912,7 @@ string MultiBit(string num1, string num2)
 			}
 		}
 		step++;
-		res = PlusBit(res, temp, 1); //cộng tạo kết quả sau mỗi lần nhân
+		res = PlusBit(res, temp); //cộng tạo kết quả sau mỗi lần nhân
 	}
 	EraseZero(res);
 	return res;
@@ -943,7 +939,7 @@ string DivBit(string num1, string num2)
 			else if (carry.size() >= num2.size() && (CompareBit(carry, num2) == 0 || carry == num2)) //nếu dư >= số chia thì mới trừ
 			{
 				res += "1";
-				temp = PlusBit(carry, negativeNum2, 0); //carry - num2
+				temp = PlusBit(carry, negativeNum2); //carry - num2
 				carry = temp;
 				EraseZero(carry);
 			}
@@ -1221,8 +1217,8 @@ bool CompareBit(string num1, string num2)
 int main()
 {
 	QInt a, b, c, d;
-	a.ScanQIntDec("170141183460469231731687303715884105727");
-	b.ScanQIntDec("170141183460469231731687303715884105727");
+	a.ScanQIntDec("324234523534645674575687658763252345345");
+	b.ScanQIntDec("12345678912");
 	c.ScanQIntDec("12345678912");
 
 	d = a * b;
