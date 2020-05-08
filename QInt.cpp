@@ -91,16 +91,31 @@ QInt& QInt::operator=(const QInt& num)
 //Toán tử gán bằng QInt a;string b; a=b ;
 QInt& QInt::operator=(const string num)
 {
-	if (num == "" || num == " ")
+	string nDec = num;
+	if (nDec == "" || nDec == " ")
 	{
 		cout << "Khong co du lieu hay nhap du lieu la so thap phan" << endl;
 		return *this;
 	}
 	else
 	{
-		string nBit = DecToBin(num);
+		string nBit = DecToBin(nDec);
+		EraseZero(nBit);
+		if (nDec > "170141183460469231731687303715884105727")
+		{
+			goto Trave;
+		}
+		if (nDec[0] == '-')
+		{
+			nDec.erase(0, 1);
+			if (nDec > "170141183460469231731687303715884105728")
+			{
+				goto Trave;
+			}
+		}
 		if (nBit.size() > 128)
 		{
+		Trave:
 			cout << "Invalid";
 			exit(0);
 		}
@@ -116,8 +131,21 @@ void QInt::ScanQIntDec(string nDec)
 {
 	string nBit = DecToBin(nDec);
 	EraseZero(nBit);
+	if (nDec > "170141183460469231731687303715884105727" )
+	{
+		goto Trave;
+	}
+	if (nDec[0] == '-')
+	{
+		nDec.erase(0, 1);
+		if (nDec > "170141183460469231731687303715884105728")
+		{
+			goto Trave;
+		}
+	}
 	if (nBit.size() > 128)
 	{
+		Trave:
 		cout << "Invalid";
 		exit(0);
 	}
@@ -1163,7 +1191,7 @@ void EraseZero(string& num)
 		num.erase(0, 1);
 	}
 }
-//Hàm kiểm tra dấu của data (true -> + , false -> -)
+//Hàm kiểm tra dấu của data (true -> + , false -> -) //(chỉ so sánh được các số biểu diễn trong miền)
 bool CheckSign(const int data[4])
 {
 	string a = ConvertInt4toString(data);
@@ -1216,12 +1244,5 @@ bool CompareBit(string num1, string num2)
 
 int main()
 {
-	QInt a, b, c, d;
-	a.ScanQIntDec("324234523534645674575687658763252345345");
-	b.ScanQIntDec("12345678912");
-	c.ScanQIntDec("12345678912");
 
-	d = a * b;
-
-	//d.PrintQIntDec();
 }
