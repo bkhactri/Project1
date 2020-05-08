@@ -14,7 +14,8 @@ private:
 	int data[4];
 
 public:
-	void ScanQFloat();
+	void ScanQFloatBin(string databin);
+	void ScanQFloatDec(string datadec);
 	string PrintQFloat(int fraction = 0);
 	string BinToDec(string binQfloat, int fraction = 0);
 	string DecToBin(string decQfloat);
@@ -25,9 +26,6 @@ public:
 	QFloat(const QFloat& datatmp);
 	~QFloat() {};
 };
-
-//void GetBit(int x, char bit[32]);
-//void SetBit(char bit[32], int& x);
 
 void ConvertBinStringtoFloat(string a, int data[4]);
 string ConvertFloattoBinString(int bytes[4]);

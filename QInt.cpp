@@ -99,7 +99,13 @@ QInt& QInt::operator=(const string num)
 	else
 	{
 		string nBit = DecToBin(num);
-		ConvertStringtoInt4(nBit, this->data);
+		if (nBit.size() > 128)
+		{
+			cout << "Invalid";
+			exit(0);
+		}
+		else
+			ConvertStringtoInt4(nBit, this->data);
 	}
 	return *this;
 }
@@ -110,12 +116,23 @@ void QInt::ScanQIntDec(string nDec)
 {
 	string nBit=DecToBin(nDec);
 	EraseZero(nBit);
-	ConvertStringtoInt4(nBit, this->data);
+	if (nBit.size() > 128)
+	{
+		cout << "Invalid";
+		exit(0);
+	}
+	else 
+		ConvertStringtoInt4(nBit, this->data);
 }
 //Hàm đọc chuỗi  hệ 2 rồi lưu trữ vào data[4]
 void QInt::ScanQIntBin(string nBit)
 {
 	EraseZero(nBit);
+	if (nBit.size() > 128)
+	{
+		cout << "Invalid";
+		exit(0);
+	}
 	ConvertStringtoInt4(nBit, this->data);
 }
 //Hàm đọc chuỗi hệ 16 sau đó chuyển sang hệ 2 rồi lưu trữ vào data[4]
@@ -123,7 +140,13 @@ void QInt::ScanQIntHex(string nHex)
 {
 	string nBit = HexToBin(nHex);
 	EraseZero(nBit);
-	ConvertStringtoInt4(nBit, this->data);
+	if (nBit.size() > 128)
+	{
+		cout << "Invalid";
+		exit(0);
+	}
+	else
+		ConvertStringtoInt4(nBit, this->data);
 }
 
 
@@ -537,7 +560,7 @@ QInt QInt::operator*(const QInt& num)
 			sign = 1;
 		}
 		//nhân 2 chuỗi
-		temp = MultiBit(a, b);
+		temp = MultiBit(a, b); //chuỗi nhị phân sau nhân
 		if (temp.size() <= 128)
 		{
 			if (sign == 1)//xét xem kq âm hay dương
@@ -547,7 +570,7 @@ QInt QInt::operator*(const QInt& num)
 			Trave:
 			ConvertStringtoInt4(temp, res.data);
 			return res;
-		}
+		}	
 	}
 }
 //Toán tử /
@@ -831,8 +854,14 @@ string ConvertToOffetTwo(string num)
 string PlusBit(string num1, string num2)//num1 + num2
 {
 	int carry = 0; // biến nhớ phần bit thừa mặc định là 0
-	FillZero(num1, 128); //Giúp 2 chuỗi bit có độ dài bằng nhau cho dễ xử lý
-	FillZero(num2, 128);
+	if (num1.size() > num2.size()) //Giúp 2 thg có kích thước bằng nhau
+	{
+		FillZero(num2, num1.size());
+	}
+	else
+	{
+		FillZero(num1, num2.size());
+	}
 	string res = num1;
 	for (int i = num1.length() - 1; i >= 0; i--) //Bắt đầu cộng từ bit cuối đi lên
 	{
@@ -879,18 +908,11 @@ string MultiBit(string num1, string num2)
 			temp = num1; // gán temp = num1 (vì nhân với 1 nên bằng chính nó)
 			for (int j = 0; j < step; j++) // đếm xem nên lùi bao nhiêu số
 			{
-				temp += '0'; 
+				temp += '0';
 			}
 		}
 		step++;
-		if (temp.size() > 128) //nếu tràn thì trả về 129 bit để xác định tràn
-		{
-			return "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
-		}
-		else
-		{
-			res = PlusBit(res, temp); //cộng tạo kết quả sau mỗi lần nhân
-		}
+		res = PlusBit(res, temp); //cộng tạo kết quả sau mỗi lần nhân
 	}
 	EraseZero(res);
 	return res;
@@ -1195,15 +1217,11 @@ bool CompareBit(string num1, string num2)
 int main()
 {
 	QInt a, b, c, d;
-	a.ScanQIntDec("32423452353464567457568765876");
-	b.ScanQIntDec("2132423534534645645");
+	a.ScanQIntDec("170141183460469231731687303715884105727");
+	b.ScanQIntDec("170141183460469231731687303715884105727");
 	c.ScanQIntDec("12345678912");
 
-	d = a * c;
+	d = a * b;
 
-	d.PrintQIntDec();
-
-	
-
-
+	//d.PrintQIntDec();
 }

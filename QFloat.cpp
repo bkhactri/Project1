@@ -44,14 +44,13 @@ QFloat::QFloat(const QFloat& datatmp)
 		data[i] = datatmp.data[i];
 	}
 }
-void QFloat::ScanQFloat()
+void QFloat::ScanQFloatBin(string databin)
 {
-	string datatmp;
-	int he(2);
-	cout << "He: "; cin >> he;
-	cout << "Data: ";
-	fflush(stdin); getline(cin, datatmp);
-	*this = QFloat(datatmp, he); // khoi tao qfloat
+	ConvertBinStringtoFloat(databin, data);
+}
+void QFloat::ScanQFloatDec(string datadec)
+{
+	ConvertBinStringtoFloat(DecToBin(datadec), data);
 }
 string QFloat::PrintQFloat(int fraction) // xuat qfloat
 {

@@ -1,4 +1,4 @@
-﻿/*#include"QInt.h"
+﻿#include"QInt.h"
 #include"UI.h"
 #include"QFloat.h"
 
@@ -302,26 +302,28 @@ void Mul_Dec() // * Dec
 	gotoxy(77, 13);
 	cin >> y;
 
-	string nbit1 = a.DecToBin(x);
+	string nbit1 = a.DecToBin(x); 
 	string nbit2 = b.DecToBin(y);
-	string multi_temp = MultiBit(nbit1, nbit2);
+	string multi_temp = MultiBit(nbit1, nbit2); //chuỗi bit nhân 
 	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0 || multi_temp.size() > 128)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
 		gotoxy(130, 20); cout << "Invalid";
 	}
-	else {
-		a.ScanQIntDec(x);
+	else 
+	{
+		a.ScanQIntDec(x); 
 		b.ScanQIntDec(y);
 
 		c = a * b;
 		s = c.Print_QIntBin();
 		q = c.Print_QIntDec();
-		p = c.Print_QIntHex();
+		p = c.Print_QIntHex(); 
 		OutPut(s, q, p);
 	}
 }
+
 // nhân nhị phân
 void Mul_Bin() // * Bin
 {
@@ -1571,4 +1573,4 @@ int main()
 		}
 	}
 	return 0;
-}*/
+}
