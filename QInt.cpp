@@ -1,4 +1,5 @@
 ﻿#include "QInt.h"
+
 QInt::QInt()
 {
 	for (int i = 0; i < array_size; i++)
@@ -98,13 +99,7 @@ QInt& QInt::operator=(const string num)
 	else
 	{
 		string nBit = DecToBin(num);
-		if (nBit.size() > 128)
-		{
-			cout << "Invalid input" << endl;
-			exit(0);
-		}
-		else
-			ConvertStringtoInt4(nBit, this->data);
+		ConvertStringtoInt4(nBit, this->data);
 	}
 	return *this;
 }
@@ -447,6 +442,7 @@ QInt QInt::operator<<(int nBitShifted)
 QInt QInt::operator>>(int nBitShifted)
 {
 	string a = ConvertInt4toString(this->data);
+	FillZero(a, 128);
 	int n = a.size();
 	string kq;
 	kq.resize(128);
@@ -511,10 +507,11 @@ QInt QInt::operator*(const QInt& num)
 	bool bSign = CheckSign(num.data);
 	string a = ConvertInt4toString(this->data); //chuỗi nhị phân a
 	string b = ConvertInt4toString(num.data); //chuỗi nhị phân b
-	string temp;
+	string temp;//Lưu chuỗi nhị phân sau khi nhân
 	if (IsZero(this->data) == 1 || IsZero(num.data) == 1)//1 trong 2 bằng 0 thì kq nhân =0
 	{
 		temp = "0";
+		goto Trave;
 	}
 	else
 	{
@@ -541,13 +538,17 @@ QInt QInt::operator*(const QInt& num)
 		}
 		//nhân 2 chuỗi
 		temp = MultiBit(a, b);
-		if (sign == 1)//xét xem kq âm hay dương
+		if (temp.size() <= 128)
 		{
-			temp = ConvertToOffetTwo(temp);
+			if (sign == 1)//xét xem kq âm hay dương
+			{
+				temp = ConvertToOffetTwo(temp);
+			}
+			Trave:
+			ConvertStringtoInt4(temp, res.data);
+			return res;
 		}
 	}
-	ConvertStringtoInt4(temp, res.data);
-	return res;
 }
 //Toán tử /
 QInt QInt::operator/(const QInt& num)
@@ -830,7 +831,7 @@ string ConvertToOffetTwo(string num)
 string PlusBit(string num1, string num2)//num1 + num2
 {
 	int carry = 0; // biến nhớ phần bit thừa mặc định là 0
-	FillZero(num1, 128); //Tạo chuỗi 128bit bằng cách thêm 0 vào đầu chuỗi
+	FillZero(num1, 128); //Giúp 2 chuỗi bit có độ dài bằng nhau cho dễ xử lý
 	FillZero(num2, 128);
 	string res = num1;
 	for (int i = num1.length() - 1; i >= 0; i--) //Bắt đầu cộng từ bit cuối đi lên
@@ -851,6 +852,10 @@ string PlusBit(string num1, string num2)//num1 + num2
 			res[i] = temp + '0';
 			carry = 0;
 		}
+	}
+	if (carry) //Cái này xảy ra là tràn
+	{
+		res = char(carry + '0') + res;
 	}
 	return res;
 }
@@ -877,8 +882,15 @@ string MultiBit(string num1, string num2)
 				temp += '0'; 
 			}
 		}
-		step++; 
-		res = PlusBit(res, temp); //cộng tạo kết quả sau mỗi lần nhân
+		step++;
+		if (temp.size() > 128) //nếu tràn thì trả về 129 bit để xác định tràn
+		{
+			return "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+		}
+		else
+		{
+			res = PlusBit(res, temp); //cộng tạo kết quả sau mỗi lần nhân
+		}
 	}
 	EraseZero(res);
 	return res;
@@ -984,7 +996,7 @@ string MinusDec(string num1, string num2)
 	int carry = 0; //Biến này để nhớ phần mượn khi trừ 3-8 (mượn 1 -> kq trừ = 5, carry =1 )
 	bool sign = 0; //Biến xét dấu , 0 là + , 1 là -
 
-	if (num1.size() > num2.size())
+	if (num1.size() > num2.size()) //Giúp 2 thg có kích thước bằng nhau
 	{
 		FillZero(num2, num1.size());
 	}
@@ -1024,8 +1036,6 @@ string MinusDec(string num1, string num2)
 	}
 	return res;
 }
-
-
 
 
 void GetBit(int x, char bit[32])
@@ -1169,6 +1179,10 @@ bool CompareBit(string num1, string num2)
 	{
 		FillZero(num1, num2.size());
 	}
+	if (num1 == num2)
+	{
+		return false;
+	}
 	for (int i = 0; i < num1.size(); i++)
 	{
 		if (num1[i] != num2[i])
@@ -1178,3 +1192,18 @@ bool CompareBit(string num1, string num2)
 	}
 }
 
+int main()
+{
+	QInt a, b, c, d;
+	a.ScanQIntDec("32423452353464567457568765876");
+	b.ScanQIntDec("2132423534534645645");
+	c.ScanQIntDec("12345678912");
+
+	d = a * c;
+
+	d.PrintQIntDec();
+
+	
+
+
+}

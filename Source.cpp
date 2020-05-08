@@ -1,4 +1,4 @@
-﻿#include"QInt.h"
+﻿/*#include"QInt.h"
 #include"UI.h"
 #include"QFloat.h"
 
@@ -304,7 +304,8 @@ void Mul_Dec() // * Dec
 
 	string nbit1 = a.DecToBin(x);
 	string nbit2 = b.DecToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0)
+	string multi_temp = MultiBit(nbit1, nbit2);
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkDec(x) == 0 || checkDec(y) == 0 || multi_temp.size() > 128)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -334,8 +335,8 @@ void Mul_Bin() // * Bin
 	cin >> x;
 	gotoxy(77, 13);
 	cin >> y;
-
-	if (x.size() > 128 || y.size() > 128 || checkBin(x) == 0 || checkBin(y) == 0)
+	string multi_temp = MultiBit(x, y);
+	if (x.size() > 128 || y.size() > 128 || checkBin(x) == 0 || checkBin(y) == 0 || multi_temp.size() > 128)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -369,7 +370,8 @@ void Mul_Hex() // * Hex
 
 	string nbit1 = a.HexToBin(x);
 	string nbit2 = b.HexToBin(y);
-	if (nbit1.size() > 128 || nbit2.size() > 128 || checkHex(x) == 0 || checkHex(y) == 0)
+	string multi_temp = MultiBit(nbit1, nbit2);
+	if (nbit1.size() > 128 || nbit2.size() > 128 || checkHex(x) == 0 || checkHex(y) == 0 || multi_temp.size() > 128)
 	{
 		gotoxy(50, 20); cout << "Invalid";
 		gotoxy(91, 20); cout << "Invalid";
@@ -1569,4 +1571,4 @@ int main()
 		}
 	}
 	return 0;
-}
+}*/

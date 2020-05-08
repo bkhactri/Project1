@@ -237,7 +237,7 @@ string QFloat::BinToDec(string binQfloat, int numofele) // binqfloat day nhi pha
 	}
 	else
 	{
-		numofele = 34 - wholes.size();
+		numofele = 33 - wholes.size();
 		if (fraction.size() > numofele)
 		{
 			bool flag = false;
