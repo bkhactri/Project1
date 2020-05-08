@@ -95,32 +95,13 @@ QInt& QInt::operator=(const string num)
 	if (nDec == "" || nDec == " ")
 	{
 		cout << "Khong co du lieu hay nhap du lieu la so thap phan" << endl;
-		return *this;
+		exit(0);
 	}
 	else
 	{
 		string nBit = DecToBin(nDec);
 		EraseZero(nBit);
-		if (nDec > "170141183460469231731687303715884105727")
-		{
-			goto Trave;
-		}
-		if (nDec[0] == '-')
-		{
-			nDec.erase(0, 1);
-			if (nDec > "170141183460469231731687303715884105728")
-			{
-				goto Trave;
-			}
-		}
-		if (nBit.size() > 128)
-		{
-		Trave:
-			cout << "Invalid";
-			exit(0);
-		}
-		else
-			ConvertStringtoInt4(nBit, this->data);
+		ConvertStringtoInt4(nBit, this->data);
 	}
 	return *this;
 }
@@ -131,36 +112,12 @@ void QInt::ScanQIntDec(string nDec)
 {
 	string nBit = DecToBin(nDec);
 	EraseZero(nBit);
-	if (nDec > "170141183460469231731687303715884105727" )
-	{
-		goto Trave;
-	}
-	if (nDec[0] == '-')
-	{
-		nDec.erase(0, 1);
-		if (nDec > "170141183460469231731687303715884105728")
-		{
-			goto Trave;
-		}
-	}
-	if (nBit.size() > 128)
-	{
-		Trave:
-		cout << "Invalid";
-		exit(0);
-	}
-	else
-		ConvertStringtoInt4(nBit, this->data);
+	ConvertStringtoInt4(nBit, this->data);
 }
 //Hàm đọc chuỗi  hệ 2 rồi lưu trữ vào data[4]
 void QInt::ScanQIntBin(string nBit)
 {
 	EraseZero(nBit);
-	if (nBit.size() > 128)
-	{
-		cout << "Invalid";
-		exit(0);
-	}
 	ConvertStringtoInt4(nBit, this->data);
 }
 //Hàm đọc chuỗi hệ 16 sau đó chuyển sang hệ 2 rồi lưu trữ vào data[4]
@@ -168,13 +125,7 @@ void QInt::ScanQIntHex(string nHex)
 {
 	string nBit = HexToBin(nHex);
 	EraseZero(nBit);
-	if (nBit.size() > 128)
-	{
-		cout << "Invalid";
-		exit(0);
-	}
-	else
-		ConvertStringtoInt4(nBit, this->data);
+	ConvertStringtoInt4(nBit, this->data);
 }
 
 
@@ -562,7 +513,6 @@ QInt QInt::operator*(const QInt& num)
 	if (IsZero(this->data) == 1 || IsZero(num.data) == 1)//1 trong 2 bằng 0 thì kq nhân =0
 	{
 		temp = "0";
-		goto Trave;
 	}
 	else
 	{
@@ -589,21 +539,13 @@ QInt QInt::operator*(const QInt& num)
 		}
 		//nhân 2 chuỗi
 		temp = MultiBit(a, b); //chuỗi nhị phân sau nhân
-		if (temp.size() <= 128)
+		if (sign == 1)//xét xem kq âm hay dương
 		{
-			if (sign == 1)//xét xem kq âm hay dương
-			{
-				temp = ConvertToOffetTwo(temp);
-			}
-		Trave:
-			ConvertStringtoInt4(temp, res.data);
-			return res;
-		}
-		else
-		{
-			cout << BinToDec(temp) << endl;
+			temp = ConvertToOffetTwo(temp);
 		}
 	}
+	ConvertStringtoInt4(temp, res.data);
+	return res;
 }
 //Toán tử /
 QInt QInt::operator/(const QInt& num)
@@ -886,14 +828,8 @@ string ConvertToOffetTwo(string num)
 string PlusBit(string num1, string num2)//num1 + num2
 {
 	int carry = 0; // biến nhớ phần bit thừa mặc định là 0
-	if (num1.size() > num2.size()) //Giúp 2 thg có kích thước bằng nhau
-	{
-		FillZero(num2, num1.size());
-	}
-	else
-	{
-		FillZero(num1, num2.size());
-	}
+	FillZero(num1, 128);
+	FillZero(num2, 128);
 	string res = num1;
 	for (int i = num1.length() - 1; i >= 0; i--) //Bắt đầu cộng từ bit cuối đi lên
 	{
@@ -1244,5 +1180,9 @@ bool CompareBit(string num1, string num2)
 
 int main()
 {
-
+	QInt a, b, d;
+	a.ScanQIntDec("32423452353464567457568765876");
+	b.ScanQIntDec("2132423534534645645");
+	d = a * b;
+	d.PrintQIntDec();
 }
