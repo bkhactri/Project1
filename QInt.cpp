@@ -89,20 +89,11 @@ QInt& QInt::operator=(const QInt& num)
 	return *this;
 }
 //Toán tử gán bằng QInt a;string b; a=b ;
-QInt& QInt::operator=(const string num)
+QInt& QInt::operator=(const string nDec)
 {
-	string nDec = num;
-	if (nDec == "" || nDec == " ")
-	{
-		cout << "Khong co du lieu hay nhap du lieu la so thap phan" << endl;
-		exit(0);
-	}
-	else
-	{
-		string nBit = DecToBin(nDec);
-		EraseZero(nBit);
-		ConvertStringtoInt4(nBit, this->data);
-	}
+	string nBit = DecToBin(nDec);
+	EraseZero(nBit);
+	ConvertStringtoInt4(nBit, this->data);
 	return *this;
 }
 
@@ -850,6 +841,7 @@ string PlusBit(string num1, string num2)//num1 + num2
 			carry = 0;
 		}
 	}
+	EraseZero(res);
 	return res;
 }
 //Hàm nhân 2 chuỗi nhị phân num1 và num2
@@ -870,9 +862,11 @@ string MultiBit(string num1, string num2)
 		if (num2[i] == '1') //chỉ quan tâm th bit=1 vì bit=0 nhân 0 thì ko có gì
 		{
 			temp = num1; // gán temp = num1 (vì nhân với 1 nên bằng chính nó)
+			FillZero(temp, 128);
 			for (int j = 0; j < step; j++) // đếm xem nên lùi bao nhiêu số
 			{
-				temp += '0';
+				temp.erase(0, 1);
+				temp.insert(temp.size(), "0");
 			}
 		}
 		step++;
@@ -1181,8 +1175,14 @@ bool CompareBit(string num1, string num2)
 int main()
 {
 	QInt a, b, d;
-	a.ScanQIntDec("32423452353464567457568765876");
-	b.ScanQIntDec("2132423534534645645");
+	a.ScanQIntDec("170141183460469231731687303715884105728");
+	//cout << "a bit: "; a.PrintQIntBin();
+	b.ScanQIntDec("170141183460469231731687303715884105727");
+	//cout << "b bit: "; b.PrintQIntBin();
 	d = a * b;
-	d.PrintQIntDec();
+	cout << "d dec: "; d.PrintQIntDec();
+	int t1 = 2147483648;
+	int t2 = 2147483647;
+	cout << t1 * t2 << endl;
+	
 }
