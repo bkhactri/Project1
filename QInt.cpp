@@ -21,7 +21,7 @@ QInt::QInt(const QInt& int16)
 		data[i] = int16.data[i];
 	}
 }
-QInt::~QInt(){}
+QInt::~QInt() {}
 
 //Hàm in ra giao diện chuỗi số hệ 10
 string QInt::Print_QIntDec()
@@ -114,14 +114,14 @@ QInt& QInt::operator=(const string num)
 //Hàm đọc chuỗi hệ 10 sau đó chuyển sang hệ 2 rồi lưu trữ vào data[4]
 void QInt::ScanQIntDec(string nDec)
 {
-	string nBit=DecToBin(nDec);
+	string nBit = DecToBin(nDec);
 	EraseZero(nBit);
 	if (nBit.size() > 128)
 	{
 		cout << "Invalid";
 		exit(0);
 	}
-	else 
+	else
 		ConvertStringtoInt4(nBit, this->data);
 }
 //Hàm đọc chuỗi  hệ 2 rồi lưu trữ vào data[4]
@@ -150,21 +150,21 @@ void QInt::ScanQIntHex(string nHex)
 }
 
 
-//In ra màn hình sô thập phân (dạng chuỗi)
+//Hàm in ra console test sô thập phân (dạng chuỗi)
 void QInt::PrintQIntDec()
 {
-	if (IsZero(this->data) == 1) 
+	if (IsZero(this->data) == 1)
 	{
-		cout << "0" << endl; 
+		cout << "0" << endl;
 	}
-	else 
+	else
 	{
-		string nBit = ConvertInt4toString(this->data); 
-		string nDec = BinToDec(nBit); 
-		cout << nDec << endl; 
+		string nBit = ConvertInt4toString(this->data);
+		string nDec = BinToDec(nBit);
+		cout << nDec << endl;
 	}
 }
-//In ra màn hình chuỗi số nhị phân
+//àm in ra console test chuỗi số nhị phân
 void QInt::PrintQIntBin()
 {
 	if (IsZero(this->data) == 1)
@@ -173,22 +173,22 @@ void QInt::PrintQIntBin()
 	}
 	else
 	{
-		string nBit = ConvertInt4toString(this->data); 
+		string nBit = ConvertInt4toString(this->data);
 		cout << nBit << endl;
 	}
 }
-//In ra màn hình sô thập lục phân (dạng chuỗi)
+//àm in ra console test sô thập lục phân (dạng chuỗi)
 void QInt::PrintQIntHex()
 {
 	if (IsZero(this->data) == 1)
 	{
 		cout << "0" << endl;
 	}
-	else 
+	else
 	{
-		string nBit = ConvertInt4toString(this->data); 
-		string nHex = BinToHex(nBit); 
-		cout << nHex << endl; 
+		string nBit = ConvertInt4toString(this->data);
+		string nHex = BinToHex(nBit);
+		cout << nHex << endl;
 	}
 }
 
@@ -196,7 +196,7 @@ void QInt::PrintQIntHex()
 
 //Chuyển từ hệ 10 sang hệ 2
 string QInt::DecToBin(string nDec)
-{	
+{
 	int status = 1; //Nhớ dấu của số thập phân
 	string bit_array; //Lưu trữ chuỗi bit
 	char bit;
@@ -287,7 +287,7 @@ string QInt::BinToHex(string bit)
 		for (int j = 0; j < 4; j++)
 		{
 			temp += bit[i];
-			i++;	
+			i++;
 		}
 		if (temp == "0000") { nHex += "0"; }
 		else if (temp == "0001") { nHex += "1"; }
@@ -504,7 +504,7 @@ QInt QInt::operator+(const QInt& num)
 	QInt res;
 	string a = ConvertInt4toString(this->data); //chuỗi nhị phân a
 	string b = ConvertInt4toString(num.data); //chuỗi nhị phân b
-	string temp = PlusBit(a, b); //chuỗi nhị phân a+b
+	string temp = PlusBit(a, b, 0); //chuỗi nhị phân a+b
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
@@ -516,7 +516,7 @@ QInt QInt::operator-(const QInt& num)
 	string a = ConvertInt4toString(this->data); //chuỗi nhị phân a
 	string b = ConvertInt4toString(num.data); //chuỗi nhị phân b 
 	b = ConvertToOffetTwo(b); //b -> -b (nếu b âm thì -b->b)
-	string temp = PlusBit(a, b);//a - b (nếu b âm thì a + --b)
+	string temp = PlusBit(a, b, 0);//a - b (nếu b âm thì a + --b)
 	ConvertStringtoInt4(temp, res.data);
 	return res;
 }
@@ -567,10 +567,14 @@ QInt QInt::operator*(const QInt& num)
 			{
 				temp = ConvertToOffetTwo(temp);
 			}
-			Trave:
+		Trave:
 			ConvertStringtoInt4(temp, res.data);
 			return res;
-		}	
+		}
+		else
+		{
+			cout << BinToDec(temp) << endl;
+		}
 	}
 }
 //Toán tử /
@@ -778,7 +782,7 @@ bool QInt::operator==(const QInt& num) const
 
 
 //Hàm chia 1 chuỗi số thập phân(num) cho 2 và tìm phần dư của phép chia trả về bit
-string Div2(const string num,char &bit)
+string Div2(const string num, char& bit)
 {
 	//Hàm này dùng thuật toán sơ đẳng của phép chia
 	string res; //lưu trữ kết quả sau chia
@@ -805,7 +809,7 @@ string Div2(const string num,char &bit)
 string Multi2(int repeat)
 {
 	string res = "1"; // tạo chuỗi kq gán mặc định là 1
-	int temp = 0; 
+	int temp = 0;
 	int carry = 0; // phần dư khi nhân > 10 
 	for (int i = 0; i < repeat; i++) //lặp lại số lần nhân 2 (tức 2^repeat)
 	{
@@ -838,7 +842,7 @@ string ConvertToOffetTwo(string num)
 		temp += '1';
 	}
 	else if (num[0] == '1') //Tức là số âm
-	{ 
+	{
 		temp += '0';
 	}
 	for (int i = 1; i < num.size(); i++) //Đảo bit
@@ -847,11 +851,11 @@ string ConvertToOffetTwo(string num)
 		else if (num[i] == '1') temp += '0';
 	}
 	//Đến đây đã có dãy bit bù 1
-	temp = PlusBit(temp, "1"); // + 1 vào dãy bit bù 1 để có dãy bit bù 2
+	temp = PlusBit(temp, "1", 0); // + 1 vào dãy bit bù 1 để có dãy bit bù 2
 	return temp;
 }
-//Hàm cộng 2 chuỗi nhị phân num1 và num2
-string PlusBit(string num1, string num2)//num1 + num2
+//Hàm cộng 2 chuỗi nhị phân num1 và num2 , handles cho phép cộng tràn
+string PlusBit(string num1, string num2,bool handles)//num1 + num2
 {
 	int carry = 0; // biến nhớ phần bit thừa mặc định là 0
 	if (num1.size() > num2.size()) //Giúp 2 thg có kích thước bằng nhau
@@ -868,7 +872,7 @@ string PlusBit(string num1, string num2)//num1 + num2
 		int temp = (num1[i] - '0') + (num2[i] - '0') + carry;
 		if (temp == 3) // ghi bit thứ i là 1 và carry nhớ 1
 		{
-			res[i] = '1'; 
+			res[i] = '1';
 			carry = 1;
 		}
 		if (temp == 2) // ghi bit thứ i là 0 và carry nhớ 1
@@ -882,7 +886,7 @@ string PlusBit(string num1, string num2)//num1 + num2
 			carry = 0;
 		}
 	}
-	if (carry) //Cái này xảy ra là tràn
+	if (carry != 0 && handles == 1) //tràn
 	{
 		res = char(carry + '0') + res;
 	}
@@ -912,7 +916,7 @@ string MultiBit(string num1, string num2)
 			}
 		}
 		step++;
-		res = PlusBit(res, temp); //cộng tạo kết quả sau mỗi lần nhân
+		res = PlusBit(res, temp, 1); //cộng tạo kết quả sau mỗi lần nhân
 	}
 	EraseZero(res);
 	return res;
@@ -939,7 +943,7 @@ string DivBit(string num1, string num2)
 			else if (carry.size() >= num2.size() && (CompareBit(carry, num2) == 0 || carry == num2)) //nếu dư >= số chia thì mới trừ
 			{
 				res += "1";
-				temp = PlusBit(carry, negativeNum2); //carry - num2
+				temp = PlusBit(carry, negativeNum2, 0); //carry - num2
 				carry = temp;
 				EraseZero(carry);
 			}

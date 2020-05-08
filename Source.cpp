@@ -1,4 +1,4 @@
-﻿#include"QInt.h"
+﻿/*#include"QInt.h"
 #include"UI.h"
 #include"QFloat.h"
 
@@ -1573,4 +1573,4 @@ int main()
 		}
 	}
 	return 0;
-}
+}*/

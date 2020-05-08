@@ -84,7 +84,7 @@ string Multi2(int repeat);
 //Hàm chuyển đổi bù 2
 string ConvertToOffetTwo(string num);
 //Hàm cộng 2 chuỗi nhị phân
-string PlusBit(string num1, string num2);
+string PlusBit(string num1, string num2,bool handles);
 //Hàm nhân 2 chuỗi nhị phân
 string MultiBit(string num1, string num2);
 //Hàm chia 2 chuỗi nhị phân
