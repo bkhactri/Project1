@@ -20,6 +20,10 @@ void BigFrame();
 void Frame_1();
 // tạo 1 khung nhỏ bên trong
 void Frame_2();
+// tạo 2 khung nhỏ bên trong dành cho Qfloat Dec
+void Frame_3();
+// tạo 1 khung nhỏ bên trong file
+void Frame_4();
 // xoá vị trí nhập vào
 void deleteInput();
 // xóa vị trí xuất ra
@@ -38,3 +42,11 @@ int checkBin(string s);
 int checkHex(string s);
 // kiểm tra chia
 int checkDiv(string s);
+// kiểm tra QFloat thập phân
+int checkQFloatDec(string s);
+// xuất Invalid
+void outputInvalidQInt();
+// xuất Invalid QFloat
+void outputInvalidQFloat();
+// chuyển string sang int
+int convertStringtoInt(string n);

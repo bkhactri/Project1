@@ -55,105 +55,154 @@ int Move()
 void BigFrame()
 {
 	// Khung lon
-	for (int i = 20; i < 165; i++) // tao dong ngang
+	for (int i = 1; i <= 167; i++) // tao dong ngang
 	{
 		gotoxy(i, 5); cout << char(205); // dong ngang tren
 		gotoxy(i, 27); cout << char(205);  // dong ngang duoi
 	}
-
-	for (int i = 49; i < 164; i++)		// dong ngang giua
-	{
-		gotoxy(i, 16); cout << char(205);
-	}
-
-	for (int i = 21; i < 49; i++)
+	for (int i = 2; i <= 166; i++)		// dong ngang giua
 	{
 		gotoxy(i, 18); cout << char(205);
 	}
-
 	for (int i = 5; i <= 26; i++)  // dong ke thang dung
 	{
-		gotoxy(20, i); cout << char(186); // dong thang ben trai
-		gotoxy(165, i); cout << char(186); // dong thang ben phai
+		gotoxy(1, i); cout << char(186); // dong thang ben trai
+		gotoxy(167, i); cout << char(186); // dong thang ben phai
 	}
-
-	for (int i = 6; i <= 26; i++)
+	for (int i = 6; i <= 17; i++)
+	{
+		gotoxy(25, i); cout << char(186); // dong thang o giua
+	}
+	for (int i = 19; i <= 26; i++)
 	{
 		gotoxy(48, i); cout << char(186); // dong thang o giua
 	}
-
-	for (int i = 17; i <= 26; i++)
+	for (int i = 19; i <= 26; i++)
 	{
 		gotoxy(88, i); cout << char(186);
 		gotoxy(127, i); cout << char(186);
 	}
+	gotoxy(167, 5); cout << char(187); // cai moc cau ben phai ben tre^n
+	gotoxy(167, 27); cout << char(188); // cai moc cau ben phai ben duoi
+	gotoxy(1, 5); cout << char(201); // cai moc cau ben trai tren
+	gotoxy(1, 27); cout << char(200); // moc cau ben trai duoi
 
-	gotoxy(165, 5); cout << char(187); // cai moc cau ben phai ben tre^n
-	gotoxy(165, 27); cout << char(188); // cai moc cau ben phai ben duoi
-	gotoxy(20, 5); cout << char(201); // cai moc cau ben trai tren
-	gotoxy(20, 27); cout << char(200); // moc cau ben trai duoi
-
-	gotoxy(24, 20);	cout << "Huong dan su dung:";
-	gotoxy(22, 22);	cout << "Mui ten xuong : Di xuong";
-	gotoxy(22, 23);	cout << "Mui ten len : Di len";
-	gotoxy(22, 24);	cout << "Enter : Chon";
-	gotoxy(49, 18);	cout << " BIN : ";
-	gotoxy(89, 18);	cout << " DEC : ";
-	gotoxy(128, 18); cout << " HEX : ";
+	gotoxy(12, 20);	cout << "Directions for use:";
+	gotoxy(10, 22);	cout << "Down Arrow : Down";
+	gotoxy(10, 23);	cout << "Up Arrow : Up";
+	gotoxy(10, 24);	cout << "Enter : Choose";
+	gotoxy(49, 20);	cout << " BIN : ";
+	gotoxy(89, 20);	cout << " DEC : ";
+	gotoxy(128, 20); cout << " HEX : ";
 }
 
 // tạo 2 khung nhỏ bên trong
 void Frame_1()
 {
-	gotoxy(55, 9);	cout << "Nhap so X :";
-	gotoxy(55, 13); cout << "Nhap so Y :";
+	gotoxy(28, 9);	cout << "Num X";
+	gotoxy(28, 13); cout << "Num Y";
 	// Khung tren
-	for (int i = 75; i < 155; i++) // tao dong ngang
+	for (int i = 35; i <= 165; i++) // tao dong ngang
 	{
 		gotoxy(i, 8); cout << char(205); // dong ngang tren
 		gotoxy(i, 10); cout << char(205);  // dong ngang duoi
 	}
 
-	gotoxy(75, 9); cout << char(186); // dong thang ben trai
-	gotoxy(155, 9); cout << char(186); // dong thang ben phai
+	gotoxy(35, 9); cout << char(186); // dong thang ben trai
+	gotoxy(165, 9); cout << char(186); // dong thang ben phai
 
-	gotoxy(155, 8); cout << char(187); // cai moc cau ben phai ben tre^n
-	gotoxy(155, 10); cout << char(188); // cai moc cau ben phai ben duoi
-	gotoxy(75, 8); cout << char(201); // cai moc cau ben trai tren
-	gotoxy(75, 10); cout << char(200); // moc cau ben trai duoi
+	gotoxy(165, 8); cout << char(187); // cai moc cau ben phai ben tre^n
+	gotoxy(165, 10); cout << char(188); // cai moc cau ben phai ben duoi
+	gotoxy(35, 8); cout << char(201); // cai moc cau ben trai tren
+	gotoxy(35, 10); cout << char(200); // moc cau ben trai duoi
 
 	// Khung duoi
-	for (int i = 75; i < 155; i++) // tao dong ngang
+	for (int i = 35; i < 165; i++) // tao dong ngang
 	{
 		gotoxy(i, 12); cout << char(205); // dong ngang tren
 		gotoxy(i, 14); cout << char(205);  // dong ngang duoi
 	}
 
-	gotoxy(75, 13); cout << char(186); // dong thang ben trai
-	gotoxy(155, 13); cout << char(186); // dong thang ben phai
+	gotoxy(35, 13); cout << char(186); // dong thang ben trai
+	gotoxy(165, 13); cout << char(186); // dong thang ben phai
 
-	gotoxy(155, 12); cout << char(187); // cai moc cau ben phai ben tre^n
-	gotoxy(155, 14); cout << char(188); // cai moc cau ben phai ben duoi
-	gotoxy(75, 12); cout << char(201); // cai moc cau ben trai tren
-	gotoxy(75, 14); cout << char(200); // moc cau ben trai duoi
+	gotoxy(165, 12); cout << char(187); // cai moc cau ben phai ben tre^n
+	gotoxy(165, 14); cout << char(188); // cai moc cau ben phai ben duoi
+	gotoxy(35, 12); cout << char(201); // cai moc cau ben trai tren
+	gotoxy(35, 14); cout << char(200); // moc cau ben trai duoi
 }
 
 // tạo 1 khung nhỏ bên trong
 void Frame_2()
 {
-	gotoxy(55, 11);	cout << "Nhap so X :";
-	for (int i = 75; i < 155; i++)
+	gotoxy(28, 11);	cout << "Num X";
+	for (int i = 35; i <= 165; i++)
 	{
 		gotoxy(i, 10); cout << char(205);
 		gotoxy(i, 12); cout << char(205);
 	}
-	gotoxy(75, 11); cout << char(186); // dong thang ben trai
-	gotoxy(155, 11); cout << char(186); // dong thang ben phai
+	gotoxy(35, 11); cout << char(186); // dong thang ben trai
+	gotoxy(165, 11); cout << char(186); // dong thang ben phai
 
-	gotoxy(155, 10); cout << char(187); // cai moc cau ben phai ben tre^n
-	gotoxy(155, 12); cout << char(188); // cai moc cau ben phai ben duoi
-	gotoxy(75, 10); cout << char(201); // cai moc cau ben trai tren
-	gotoxy(75, 12); cout << char(200); // moc cau ben trai duoi
+	gotoxy(165, 10); cout << char(187); // cai moc cau ben phai ben tre^n
+	gotoxy(165, 12); cout << char(188); // cai moc cau ben phai ben duoi
+	gotoxy(35, 10); cout << char(201); // cai moc cau ben trai tren
+	gotoxy(35, 12); cout << char(200); // moc cau ben trai duoi
+}
+
+// tạo 2 khung nhỏ bên trong dành cho Qfloat Dec
+void Frame_3()
+{
+	gotoxy(28, 9);	cout << "Num X";
+	gotoxy(28, 13); cout << "Frac";
+	// Khung tren
+	for (int i = 35; i <= 165; i++) // tao dong ngang
+	{
+		gotoxy(i, 8); cout << char(205); // dong ngang tren
+		gotoxy(i, 10); cout << char(205);  // dong ngang duoi
+	}
+
+	gotoxy(35, 9); cout << char(186); // dong thang ben trai
+	gotoxy(165, 9); cout << char(186); // dong thang ben phai
+
+	gotoxy(165, 8); cout << char(187); // cai moc cau ben phai ben tre^n
+	gotoxy(165, 10); cout << char(188); // cai moc cau ben phai ben duoi
+	gotoxy(35, 8); cout << char(201); // cai moc cau ben trai tren
+	gotoxy(35, 10); cout << char(200); // moc cau ben trai duoi
+
+	// Khung duoi
+	for (int i = 35; i < 165; i++) // tao dong ngang
+	{
+		gotoxy(i, 12); cout << char(205); // dong ngang tren
+		gotoxy(i, 14); cout << char(205);  // dong ngang duoi
+	}
+
+	gotoxy(35, 13); cout << char(186); // dong thang ben trai
+	gotoxy(165, 13); cout << char(186); // dong thang ben phai
+
+	gotoxy(165, 12); cout << char(187); // cai moc cau ben phai ben tre^n
+	gotoxy(165, 14); cout << char(188); // cai moc cau ben phai ben duoi
+	gotoxy(35, 12); cout << char(201); // cai moc cau ben trai tren
+	gotoxy(35, 14); cout << char(200); // moc cau ben trai duoi
+}
+
+// tạo 1 khung nhỏ bên trong file
+void Frame_4()
+{
+	gotoxy(28, 11);	cout << "File";
+	gotoxy(35, 13); cout << "Note: Save the File in drive D before using";
+	for (int i = 35; i <= 165; i++)
+	{
+		gotoxy(i, 10); cout << char(205);
+		gotoxy(i, 12); cout << char(205);
+	}
+	gotoxy(35, 11); cout << char(186); // dong thang ben trai
+	gotoxy(165, 11); cout << char(186); // dong thang ben phai
+
+	gotoxy(165, 10); cout << char(187); // cai moc cau ben phai ben tre^n
+	gotoxy(165, 12); cout << char(188); // cai moc cau ben phai ben duoi
+	gotoxy(35, 10); cout << char(201); // cai moc cau ben trai tren
+	gotoxy(35, 12); cout << char(200); // moc cau ben trai duoi
 }
 
 // xóa vị trí nhập vào
@@ -161,7 +210,7 @@ void deleteInput()
 {
 	for (int i = 7; i <= 14; i++)
 	{
-		for (int j = 55; j <= 159; j++)
+		for (int j = 27; j <= 165; j++)
 		{
 			gotoxy(j, i); cout << " ";
 		}
@@ -172,7 +221,7 @@ void deleteInput()
 void deleteOutPut()
 {
 	// clear Bin
-	for (int i = 20; i < 24; i++)
+	for (int i = 22; i <= 25; i++)
 	{
 		for (int j = 50; j < 88; j++)
 		{
@@ -182,7 +231,7 @@ void deleteOutPut()
 	}
 
 	// clear Dec
-	for (int i = 20; i < 24; i++)
+	for (int i = 22; i <= 25; i++)
 	{
 		for (int j = 91; j < 126; j++)
 		{
@@ -192,9 +241,9 @@ void deleteOutPut()
 	}
 
 	//clear Hex
-	for (int i = 20; i < 24; i++)
+	for (int i = 22; i <= 25; i++)
 	{
-		for (int j = 130; j < 163; j++)
+		for (int j = 130; j < 165; j++)
 		{
 			gotoxy(j, i);
 			cout << " ";
@@ -206,9 +255,9 @@ void deleteOutPut()
 void deleteMenu()
 {
 
-	for (int i = 7; i < 18; i++)
+	for (int i = 7; i <= 17; i++)
 	{
-		for (int j = 25; j < 48; j++)
+		for (int j = 2; j <= 24; j++)
 		{
 			gotoxy(j, i);
 			cout << " ";
@@ -226,21 +275,21 @@ void OutPut(string s, string q, string p)
 		{
 			if (i < 32)
 			{
-				gotoxy(50 + k, 20);
+				gotoxy(52 + k, 22);
 				cout << s[i];
 			}
 			else if (i < 64)
 			{
-				gotoxy(50 + k, 21);
+				gotoxy(52 + k, 23);
 				cout << s[i];
 			}
 			else if (i < 96)
 			{
-				gotoxy(50 + k, 22);
+				gotoxy(52 + k, 24);
 				cout << s[i];
 			}
 			else {
-				gotoxy(50 + k, 23);
+				gotoxy(52 + k, 25);
 				cout << s[i];
 			}
 			k++;
@@ -258,11 +307,11 @@ void OutPut(string s, string q, string p)
 		{
 			if (i < 32)
 			{
-				gotoxy(91 + l, 20);
+				gotoxy(92 + l, 22);
 				cout << q[i];
 			}
 			else {
-				gotoxy(91 + l, 21);
+				gotoxy(92 + l, 23);
 				cout << q[i];
 			}
 			l++;
@@ -280,11 +329,11 @@ void OutPut(string s, string q, string p)
 		{
 			if (i < 32)
 			{
-				gotoxy(130 + t, 20);
+				gotoxy(132 + t, 22);
 				cout << p[i];
 			}
 			else {
-				gotoxy(130 + t, 21);
+				gotoxy(132 + t, 23);
 				cout << p[i];
 			}
 			t++;
@@ -317,7 +366,7 @@ void checkEnter()
 int checkDec(string s)
 {
 	int flag = 1;
-	if (s.size() == 1 && s == "-")
+	if (s.size() == 1 && (s == "-" || s < "0" || s > "9"))
 	{
 		return 0;
 	}
@@ -387,4 +436,64 @@ int checkDiv(string s)
 		}
 	}
 	return flag;
+}
+
+// kiểm tra nhập QFloat thập phân
+int checkQFloatDec(string s)
+{
+	int flag = 1;
+	int count = 0;
+	if (s.size() == 1 && (s == "-" || s < "0" || s > "9"))
+	{
+		return 0;
+	}
+	for (int i = 0; i < s.size(); i++)
+	{
+		if (s[i] == '.')
+		{
+			count++;
+		}
+	}
+	if (count == 1 || count == 0)
+	{
+		for (int i = 1; i < s.size(); i++)
+		{
+			if ((s[i] >= '0' && s[i] <= '9' && (s[0] = '-' || (s[0] >= '0' && s[0] <= '9'))) || s[i] == '.')
+			{
+				flag = 1;
+			}
+			else {
+				flag = 0;
+				break;
+			}
+		}
+	}
+	else return 0;
+	return flag;
+}
+
+// xuất Invalid QInt
+void outputInvalidQInt()
+{
+	gotoxy(64, 23); cout << "Invalid";
+	gotoxy(104, 23); cout << "Invalid";
+	gotoxy(144, 23); cout << "Invalid";
+}
+
+// xuất Invalid QFloat
+void outputInvalidQFloat()
+{
+	gotoxy(64, 23); cout << "Invalid";
+	gotoxy(104, 23); cout << "Invalid";
+}
+
+// chuyển string sang int
+int convertStringtoInt(string n)
+{
+	int kq = 0;
+	for (int i = 0; i < n.size(); i++)
+	{
+		kq = kq * 10 + (n[i] - 48);
+	}
+	return kq;
 }

@@ -23,7 +23,7 @@ QInt::QInt(const QInt& int16)
 }
 QInt::~QInt() {}
 
-//Hàm in ra giao diện chuỗi số hệ 10
+//Hàm trả về chuỗi để in ra giao diện (cho hệ 10)
 string QInt::Print_QIntDec()
 {
 	if (IsZero(this->data) == 1)
@@ -38,7 +38,7 @@ string QInt::Print_QIntDec()
 		return nDec;
 	}
 }
-//Hàm in ra giao diện chuỗi số hệ 2
+//Hàm trả về chuỗi để in ra giao diện (cho hệ 2)
 string QInt::Print_QIntBin()
 {
 	if (IsZero(this->data) == 1)
@@ -52,7 +52,7 @@ string QInt::Print_QIntBin()
 		return nBit;
 	}
 }
-//Hàm in ra giao diện chuỗi số hệ 16
+//Hàm trả về chuỗi để in ra giao diện (cho hệ 16)
 string QInt::Print_QIntHex()
 {
 	if (IsZero(this->data) == 1)
@@ -819,8 +819,14 @@ string ConvertToOffetTwo(string num)
 string PlusBit(string num1, string num2)//num1 + num2
 {
 	int carry = 0; // biến nhớ phần bit thừa mặc định là 0
-	FillZero(num1, 128);
-	FillZero(num2, 128);
+	if (num1.size() > num2.size()) //Giúp 2 thg có kích thước bằng nhau
+	{
+		FillZero(num2, num1.size());
+	}
+	else
+	{
+		FillZero(num1, num2.size());
+	}
 	string res = num1;
 	for (int i = num1.length() - 1; i >= 0; i--) //Bắt đầu cộng từ bit cuối đi lên
 	{
@@ -871,6 +877,7 @@ string MultiBit(string num1, string num2)
 		}
 		step++;
 		res = PlusBit(res, temp); //cộng tạo kết quả sau mỗi lần nhân
+		if (res == "") res = "0";
 	}
 	EraseZero(res);
 	return res;
@@ -1170,19 +1177,4 @@ bool CompareBit(string num1, string num2)
 			return int(num1[i]) < int(num2[i]);
 		}
 	}
-}
-
-int main()
-{
-	QInt a, b, d;
-	a.ScanQIntDec("170141183460469231731687303715884105728");
-	//cout << "a bit: "; a.PrintQIntBin();
-	b.ScanQIntDec("170141183460469231731687303715884105727");
-	//cout << "b bit: "; b.PrintQIntBin();
-	d = a * b;
-	cout << "d dec: "; d.PrintQIntDec();
-	int t1 = 2147483648;
-	int t2 = 2147483647;
-	cout << t1 * t2 << endl;
-	
 }
