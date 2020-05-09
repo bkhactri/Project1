@@ -8,7 +8,7 @@
 using namespace std;
 
 #define max_bit 128 //16 byte
-#define array_size 4
+#define array_size 4 //số phần tử mảng
 
 
 class QInt
