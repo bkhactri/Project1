@@ -23,6 +23,40 @@ QInt::QInt(const QInt& int16)
 }
 QInt::~QInt() {}
 
+//Toán tử gán bằng QInt a,b;  a=b
+QInt& QInt::operator=(const QInt& num)
+{
+	if (IsZero(this->data) == 0)
+	{
+		for (int i = 0; i < array_size; i++)
+		{
+			this->data[i] = 0;
+		}
+	}
+	else
+	{
+		for (int i = 0; i < array_size; i++)
+		{
+			this->data[i] = num.data[i];
+		}
+	}
+	return *this;
+}
+//Toán tử gán bằng QInt a;string b; a=b ;
+QInt& QInt::operator=(const string nDec)
+{
+	string nBit = DecToBin(nDec);
+	EraseZero(nBit);
+	if (nBit.size() > 128)
+	{
+		cout << "Can't handle" << endl;
+		exit(0);
+	}
+	ConvertStringtoInt4(nBit, this->data);
+	return *this;
+}
+
+
 //Hàm trả về chuỗi để in ra giao diện (cho hệ 10)
 string QInt::Print_QIntDec()
 {
@@ -67,36 +101,6 @@ string QInt::Print_QIntHex()
 		return nHex;
 	}
 }
-
-
-//Toán tử gán bằng QInt a,b;  a=b
-QInt& QInt::operator=(const QInt& num)
-{
-	if (IsZero(this->data) == 0)
-	{
-		for (int i = 0; i < array_size; i++)
-		{
-			this->data[i] = 0;
-		}
-	}
-	else
-	{
-		for (int i = 0; i < array_size; i++)
-		{
-			this->data[i] = num.data[i];
-		}
-	}
-	return *this;
-}
-//Toán tử gán bằng QInt a;string b; a=b ;
-QInt& QInt::operator=(const string nDec)
-{
-	string nBit = DecToBin(nDec);
-	EraseZero(nBit);
-	ConvertStringtoInt4(nBit, this->data);
-	return *this;
-}
-
 
 //Hàm đọc chuỗi hệ 10 sau đó chuyển sang hệ 2 rồi lưu trữ vào data[4]
 void QInt::ScanQIntDec(string nDec)
@@ -161,7 +165,6 @@ void QInt::PrintQIntHex()
 		cout << nHex << endl;
 	}
 }
-
 
 
 //Chuyển từ hệ 10 sang hệ 2
@@ -597,7 +600,7 @@ QInt QInt::rol(int nBitRotate)
 	int n = a.size();
 	string kq;
 	kq.resize(128);
-	if (nBitRotate < 128 - n)
+	if (nBitRotate < 128 - n) 
 	{
 		int j = 0;
 		for (int i = 0; i < 128 - n - nBitRotate; i++)
@@ -609,7 +612,7 @@ QInt QInt::rol(int nBitRotate)
 			kq[j++] = a[i];
 		}
 	}
-	else
+	else 
 	{
 		int j = 128 - nBitRotate;
 		int h = 0;
@@ -1025,6 +1028,7 @@ string MinusDec(string num1, string num2)
 }
 
 
+//Hàm lấy bit từ số nguyên x ra mảng bit
 void GetBit(int x, char bit[32])
 {
 	for (int i = 0; i < 32; i++)
@@ -1032,6 +1036,7 @@ void GetBit(int x, char bit[32])
 		bit[i] = (x >> 31 - i) & 1;
 	}
 }
+//Hàm gán các bit trong mảng bit vào số nguyên x
 void SetBit(char bit[32], int& x)
 {
 	for (int i = 0; i < 32; i++)
@@ -1039,6 +1044,7 @@ void SetBit(char bit[32], int& x)
 		x = x | (bit[i] << 31 - i);
 	}
 }
+//Hàm chuyển đổi chuỗi nhị phân(string) sang lưu vào mảng số nguyên 
 void ConvertStringtoInt4(string a, int data[4])
 {
 	QInt c;
@@ -1070,6 +1076,7 @@ void ConvertStringtoInt4(string a, int data[4])
 	delete[] temp;
 	delete[] b;
 }
+//Hàm chuyển đổi mảng số nguyên sang chuỗi nhị phân(string)
 string ConvertInt4toString(const int data[4])
 {
 	string a;
@@ -1178,3 +1185,4 @@ bool CompareBit(string num1, string num2)
 		}
 	}
 }
+

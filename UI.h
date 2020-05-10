@@ -1,9 +1,9 @@
 ﻿#pragma once
-#include<iostream>
-#include<Windows.h>
+#include"QInt.h"
+#include"QFloat.h"
+#include<fstream>
 #include<time.h>
-#include<string>
-#include<conio.h>
+#include<Windows.h>
 using namespace std;
 
 // dich vi tri con tro
@@ -24,6 +24,10 @@ void Frame_2();
 void Frame_3();
 // tạo 1 khung nhỏ bên trong file
 void Frame_4();
+// tạo 2 khung nhỏ bên trong Shift
+void Frame_5();
+// tạo 2 khung nhỏ bên trong Shift Dec
+void Frame_6();
 // xoá vị trí nhập vào
 void deleteInput();
 // xóa vị trí xuất ra
@@ -50,3 +54,7 @@ void outputInvalidQInt();
 void outputInvalidQFloat();
 // chuyển string sang int
 int convertStringtoInt(string n);
+// đọc file QInt
+void ReadFileQInt(string input);
+// đọc file QFloat
+void ReadFileQFloat(string input);

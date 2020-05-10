@@ -21,17 +21,17 @@ public:
 	QInt(int _data[4]);
 	QInt(const QInt& int16);
 	~QInt();
-
+	/*Tống Sơn Tùng*/
 	//Toán tử gán
 	QInt& operator=(const QInt&);
 	QInt& operator=(const string);
 
-	//Hàm xuất cho UI
+	//Hàm trả về kết quả xuất cho UI
 	string Print_QIntDec();
 	string Print_QIntBin();
 	string Print_QIntHex();
 
-	//Hàm đọc chuỗi số
+	//Hàm đọc chuỗi số cho UI
 	void ScanQIntDec(string); //Hệ 10
 	void ScanQIntBin(string); //Hệ 2
 	void ScanQIntHex(string); //Hệ 16
@@ -48,6 +48,7 @@ public:
 	string BinToDec(string bit);  //2 -> 10
 	string BinToHex(string bit);  //2 -> 16
 
+	/*Ừng Văn Tuấn*/
 	//Toán tử AND,OR,XOR,NOT
 	QInt operator&(const QInt&);
 	QInt operator|(const QInt&);
@@ -58,25 +59,29 @@ public:
 	QInt operator>>(int nBitShifted);
 	QInt operator<<(int nBitShifted);
 
+	/*Bùi Khắc Trí*/
 	//Toán tử cộng,trừ,nhân,chia
 	QInt operator+(const QInt&);
 	QInt operator-(const QInt&);
 	QInt operator*(const QInt&);
 	QInt operator/(const QInt&);
 
+	/*Tống Sơn Tùng*/
 	//Xoay trái,xoay phải
 	QInt rol(int nBitRotate);
 	QInt ror(int nBitRotate);
 
-	//Toán tử so sánh
+	/*Trình Xuân Vỹ*/
+	//Toán tử so sánh 
 	bool operator==(const QInt&) const;
 	bool operator>(const QInt&) const;
 	bool operator<(const QInt&) const;
 	bool operator>=(const QInt&) const;
 	bool operator<=(const QInt&) const;
-
 };
 //Các hàm bổ trợ
+
+/*Bùi Khăc Trí*/
 //Hàm chia 2 chuỗi nhị phân tìm phần dư
 string Div2(string num, char& bit);
 //Hàm mũ 2
@@ -95,12 +100,13 @@ string PlusDec(string num1, string num2);
 string MinusDec(string num1, string num2);
 
 
+/*Ừng Văn Tuấn*/
+//Hàm lấy bit từ số nguyên x ra mảng bit
 void GetBit(int x, char bit[32]);
+//Hàm gán các bit trong mảng bit vào số nguyên x
 void SetBit(char bit[32], int& x);
 void ConvertStringtoInt4(string a, int data[4]);
 string ConvertInt4toString(const int data[4]);
-
-
 //Hàm thêm 0 vào đầu dãy
 void FillZero(string& num, int nbit);
 //Hàm xoá 0 đầu dãy
