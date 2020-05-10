@@ -15,23 +15,24 @@ private:
 
 public:
 	int* getData() { return data; }
-
+	/*Tống Sơn Tùng*/
 	QFloat(); // hàm khởi tạo
 	QFloat(string FloatStringdata, int He);// hàm khởi tạo datam hệ đưa vào
 	QFloat(int data[4]); // khởi tạo 
 	QFloat(const QFloat& datatmp);// khởi tạo từ Qfloat
 	~QFloat() {};
-
+	/*Tống Sơn Tùng*/
 	void ScanQFloatBin(string databin); // Quét giá trị đưa vào data là bin
 	void ScanQFloatDec(string datadec); // Quét giá trị đưa vào data là dec
 
+	/*Nguyễn Phúc Hưng Thịnh*/
 	string PrintQFloat(int fraction = 0); // Xuất chuỗi float fraction là số lượng phần tử sau dấu chấm
 	string BinToDec(string binQfloat, int fraction = 0); // Chuyển chuỗi bin sang float binQfloat: chuỗi bin, fraction số lượng phần tử sau dấu chấm
 	string DecToBin(string decQfloat); // Chuyển chuỗi dec sang bin decQfloat là chuỗi float đưa vào
 
 };
+/*Nguyễn Phúc Hưng Thịnh*/
 //Phần hàm bổ trợ 
-
 // Chuyển dữ liệu bin từ string -> data
 void ConvertBinStringtoFloat(string a, int data[4]); 
 // Lấy dữ liệu từ bytes-> string

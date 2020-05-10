@@ -16,36 +16,43 @@ class QInt
 private:
 	int data[4];
 public:
+	/*Tống Sơn Tùng*/
 	//Constructor
 	QInt();
 	QInt(int _data[4]);
 	QInt(const QInt& int16);
 	~QInt();
-	/*Tống Sơn Tùng*/
+
+	/*Trình Xuân Vỹ*/
 	//Toán tử gán
 	QInt& operator=(const QInt&);
 	QInt& operator=(const string);
 
+	/*Tống Sơn Tùng*/
 	//Hàm trả về kết quả xuất cho UI
 	string Print_QIntDec();
 	string Print_QIntBin();
 	string Print_QIntHex();
 
+	/*Tống Sơn Tùng*/
 	//Hàm đọc chuỗi số cho UI
 	void ScanQIntDec(string); //Hệ 10
 	void ScanQIntBin(string); //Hệ 2
 	void ScanQIntHex(string); //Hệ 16
 
+	/*Tống Sơn Tùng*/
 	//Hàm in chuỗi số
 	void PrintQIntDec(); //Hệ 10
 	void PrintQIntBin(); //Hệ 2
 	void PrintQIntHex(); //Hệ 16
 
 	//Hàm chuyển đổi giữa các hệ cơ số
+	/*Bùi Khắc Trí*/
 	string DecToBin(string nDec); //10 -> 2
+	string BinToDec(string bit);  //2 -> 10
+	/*Tống Sơn Tùng*/
 	string HexToBin(string nHex); //16 -> 2
 	string DecToHex(string nHex); //10 -> 16
-	string BinToDec(string bit);  //2 -> 10
 	string BinToHex(string bit);  //2 -> 16
 
 	/*Ừng Văn Tuấn*/
@@ -55,6 +62,7 @@ public:
 	QInt operator^(const QInt&);
 	QInt operator~();
 
+	/*Ừng Văn Tuấn*/
 	//Toán tử dịch phải , dịch trái
 	QInt operator>>(int nBitShifted);
 	QInt operator<<(int nBitShifted);
@@ -66,7 +74,7 @@ public:
 	QInt operator*(const QInt&);
 	QInt operator/(const QInt&);
 
-	/*Tống Sơn Tùng*/
+	/*Ừng Văn Tuấn*/
 	//Xoay trái,xoay phải
 	QInt rol(int nBitRotate);
 	QInt ror(int nBitRotate);
@@ -105,7 +113,9 @@ string MinusDec(string num1, string num2);
 void GetBit(int x, char bit[32]);
 //Hàm gán các bit trong mảng bit vào số nguyên x
 void SetBit(char bit[32], int& x);
+//Hàm chuyển đổi chuỗi nhị phân(string) sang lưu vào mảng số nguyên 
 void ConvertStringtoInt4(string a, int data[4]);
+//Hàm chuyển đổi mảng số nguyên sang chuỗi nhị phân(string)
 string ConvertInt4toString(const int data[4]);
 //Hàm thêm 0 vào đầu dãy
 void FillZero(string& num, int nbit);
