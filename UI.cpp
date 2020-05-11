@@ -638,70 +638,98 @@ void ReadFileQInt(string input)
 		{
 			QInt a, b, kq;
 			int compair = 0;
+			int checkError = 0;
 			if (block[i][0] == "2")
 			{
-				a.ScanQIntBin(block[i][1]);
-				b.ScanQIntBin(block[i][3]);
+				if (block[i][1].size() > 128 || block[i][3].size() > 128)
+				{
+					checkError = 1;
+				}
+				else
+				{
+					a.ScanQIntBin(block[i][1]);
+					b.ScanQIntBin(block[i][3]);
+				}
 			}
 			else if (block[i][0] == "10")
 			{
-				a.ScanQIntDec(block[i][1]);
-				b.ScanQIntDec(block[i][3]);
+				string temp1, temp2;
+				temp1 = a.DecToBin(block[i][1]);
+				temp2 = b.DecToBin(block[i][3]);
+				if (temp1.size() > 128 || temp2.size() > 128)
+				{
+					checkError = 1;
+				}
+				else
+				{
+					a.ScanQIntDec(block[i][1]);
+					b.ScanQIntDec(block[i][3]);
+				}
 			}
 			else if (block[i][0] == "16")
 			{
-				a.ScanQIntHex(block[i][1]);
-				b.ScanQIntHex(block[i][3]);
+				string temp1, temp2;
+				temp1 = a.HexToBin(block[i][1]);
+				temp2 = b.HexToBin(block[i][3]);
+				if (temp1.size() > 128 || temp2.size() > 128)
+				{
+					checkError = 1;
+				}
+				else
+				{
+					a.ScanQIntHex(block[i][1]);
+					b.ScanQIntHex(block[i][3]);
+				}
 			}
-			if (block[i][2] == "+")
+			if (block[i][2] == "+" && checkError == 0)
 			{
 				kq = a + b;
 			}
-			else if (block[i][2] == "-")
+			else if (block[i][2] == "-" && checkError == 0)
 			{
 				kq = a - b;
 			}
-			else if (block[i][2] == "*")
+			else if (block[i][2] == "*" && checkError == 0)
 			{
 				kq = a * b;
 			}
-			else if (block[i][2] == "/")
+			else if (block[i][2] == "/" && checkError == 0)
 			{
 				kq = a / b;
 			}
-			else if (block[i][2] == ">>")
+			else if (block[i][2] == ">>" && checkError == 0)
 			{
 				int nbit = convertStringtoInt(block[i][3]);
 				kq = a >> nbit;
 			}
-			else if (block[i][2] == "<<")
+			else if (block[i][2] == "<<" && checkError == 0)
 			{
 				int nbit = convertStringtoInt(block[i][3]);
 				kq = a << nbit;
 			}
-			else if (block[i][2] == "^")
+			else if (block[i][2] == "^" && checkError == 0)
 			{
 				kq = a ^ b;
 			}
-			else if (block[i][2] == "&")
+			else if (block[i][2] == "&" && checkError == 0)
 			{
 				kq = a & b;
 			}
-			else if (block[i][2] == "|")
+			else if (block[i][2] == "|" && checkError == 0)
 			{
 				kq = a | b;
 			}
-			else if (block[i][2] == "rol")
+			else if (block[i][2] == "rol" && checkError == 0)
 			{
 				int nbit = convertStringtoInt(block[i][3]);
 				kq = a.rol(nbit);
 			}
-			else if (block[i][2] == "ror")
+			else if (block[i][2] == "ror" && checkError == 0)
 			{
 				int nbit = convertStringtoInt(block[i][3]);
 				kq = a.ror(nbit);
 			}
-			else if (block[i][2] == "<")
+			else if (block[i][2] == "<" && checkError == 0)
 			{
 				compair = 1;
 				if (a < b)
@@ -713,7 +741,7 @@ void ReadFileQInt(string input)
 					kq = "0";
 				}
 			}
-			else if (block[i][2] == ">")
+			else if (block[i][2] == ">" && checkError == 0)
 			{
 				compair = 1;
 				if (a > b)
@@ -725,7 +753,7 @@ void ReadFileQInt(string input)
 					kq = "0";
 				}
 			}
-			else if (block[i][2] == "<=")
+			else if (block[i][2] == "<=" && checkError == 0)
 			{
 				compair = 1;
 				if (a <= b)
@@ -737,7 +765,7 @@ void ReadFileQInt(string input)
 					kq = "0";
 				}
 			}
-			else if (block[i][2] == ">=")
+			else if (block[i][2] == ">=" && checkError == 0)
 			{
 				compair = 1;
 				if (a >= b)
@@ -749,7 +777,7 @@ void ReadFileQInt(string input)
 					kq = "0";
 				}
 			}
-			else if (block[i][2] == "==")
+			else if (block[i][2] == "==" && checkError == 0)
 			{
 				compair = 1;
 				if (a == b)
@@ -761,7 +789,7 @@ void ReadFileQInt(string input)
 					kq = "0";
 				}
 			}
-			if (compair == 0)
+			if (compair == 0 && checkError == 0)
 			{
 				if (block[i][0] == "2")
 				{
@@ -776,7 +804,7 @@ void ReadFileQInt(string input)
 					of << kq.Print_QIntHex() << endl;
 				}
 			}
-			else
+			else if (compair == 1 && checkError == 0)
 			{
 				if (kq.Print_QIntDec() == "1")
 				{
@@ -787,59 +815,86 @@ void ReadFileQInt(string input)
 					of << "false" << endl;
 				}
 			}
+			else
+			{
+				of << "Invalid" << endl;
+			}
 		}
 		else
 		{
 			QInt kq;
 			if (block[i][0] == "2")
 			{
-				kq.ScanQIntBin(block[i][2]);
-				if (block[i][1] == "10")
+				if (block[i][2].size() > 128)
 				{
-					of << kq.Print_QIntDec() << endl;
-				}
-				else if (block[i][1] == "16")
-				{
-					of << kq.Print_QIntHex() << endl;
+					of << "Invalid" << endl;
 				}
 				else
 				{
-					QInt a = ~kq;
-					of << a.Print_QIntBin() << endl;
+					kq.ScanQIntBin(block[i][2]);
+					if (block[i][1] == "10")
+					{
+						of << kq.Print_QIntDec() << endl;
+					}
+					else if (block[i][1] == "16")
+					{
+						of << kq.Print_QIntHex() << endl;
+					}
+					else
+					{
+						QInt a = ~kq;
+						of << a.Print_QIntBin() << endl;
+					}
 				}
 			}
 			else if (block[i][0] == "10")
 			{
-				kq.ScanQIntDec(block[i][2]);
-				if (block[i][1] == "2")
+				string temp1 = kq.DecToBin(block[i][2]);
+				if (temp1.size() > 128)
 				{
-					of << kq.Print_QIntBin() << endl;
-				}
-				else if (block[i][1] == "16")
-				{
-					of << kq.Print_QIntHex() << endl;
+					of << "Invalid" << endl;
 				}
 				else
 				{
-					QInt a = ~kq;
-					of << a.Print_QIntDec() << endl;
+					kq.ScanQIntDec(block[i][2]);
+					if (block[i][1] == "2")
+					{
+						of << kq.Print_QIntBin() << endl;
+					}
+					else if (block[i][1] == "16")
+					{
+						of << kq.Print_QIntHex() << endl;
+					}
+					else
+					{
+						QInt a = ~kq;
+						of << a.Print_QIntDec() << endl;
+					}
 				}
 			}
 			else if (block[i][0] == "16")
 			{
-				kq.ScanQIntHex(block[i][2]);
-				if (block[i][1] == "2")
+				string temp1 = kq.HexToBin(block[i][2]);
+				if (temp1.size() > 128)
 				{
-					of << kq.Print_QIntBin() << endl;
-				}
-				else if (block[i][1] == "10")
-				{
-					of << kq.Print_QIntDec() << endl;
+					of << "Invalid" << endl;
 				}
 				else
 				{
-					QInt a = ~kq;
-					of << a.Print_QIntHex() << endl;
+					kq.ScanQIntHex(block[i][2]);
+					if (block[i][1] == "2")
+					{
+						of << kq.Print_QIntBin() << endl;
+					}
+					else if (block[i][1] == "10")
+					{
+						of << kq.Print_QIntDec() << endl;
+					}
+					else
+					{
+						QInt a = ~kq;
+						of << a.Print_QIntHex() << endl;
+					}
 				}
 			}
 		}
